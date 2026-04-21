@@ -59,12 +59,48 @@ html, body {
 
 /* ── Slide base ────────────────────────────────────────────── */
 .slide {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 60px 60px;
   padding: 80px 100px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
+
+/* ── Section background tints ──────────────────────────────── */
+/* INTRO */
+section[data-deck-slide="1"],
+section[data-deck-slide="2"] { background-color: #050d16; }
+/* HISTORIA — magenta tint */
+section[data-deck-slide="3"],
+section[data-deck-slide="4"],
+section[data-deck-slide="5"] { background-color: #0d0612; }
+/* PROBLEMA — red-magenta tint */
+section[data-deck-slide="7"],
+section[data-deck-slide="8"],
+section[data-deck-slide="9"],
+section[data-deck-slide="10"],
+section[data-deck-slide="11"],
+section[data-deck-slide="12"] { background-color: #110609; }
+/* SOLUCIÓN — cyan tint */
+section[data-deck-slide="14"],
+section[data-deck-slide="15"],
+section[data-deck-slide="16"],
+section[data-deck-slide="17"],
+section[data-deck-slide="18"],
+section[data-deck-slide="19"],
+section[data-deck-slide="20"] { background-color: #040e16; }
+/* DEMO — violet tint */
+section[data-deck-slide="22"],
+section[data-deck-slide="23"],
+section[data-deck-slide="24"],
+section[data-deck-slide="25"] { background-color: #08070f; }
+/* COMUNIDAD */
+section[data-deck-slide="27"],
+section[data-deck-slide="28"] { background-color: #050d16; }
 
 /* ── HUD corners ───────────────────────────────────────────── */
 .hud {
@@ -742,64 +778,76 @@ html, body {
     <span class="caret"></span><span class="arg">git log</span> <span class="flag">--stats</span>
   </div>
 
-  <div class="row grow" style="gap: 60px;">
-    <div class="col" style="flex: 1; gap: 28px; justify-content: center;">
-      <div class="t-title" style="line-height: 1.05;">
-        De <span class="neon-cyan">0</span> a <span class="neon-magenta">250.000 ⭐</span><br>en 4 meses.
+  <div class="row grow" style="gap: 40px;">
+    <!-- Col 1: texto + panel EL GIRO -->
+    <div class="col" style="flex: 0.95; gap: 22px; justify-content: center;">
+      <div class="t-title" style="line-height: 1.05; font-size: 52px;">
+        De <span class="neon-cyan">0</span> a <span class="neon-magenta">350.000 ⭐</span><br>en 4 meses.
       </div>
-      <div class="t-body" style="color: var(--fg-dim); max-width: 620px;">
-        Crecimiento explosivo. Contribuidores de todo el mundo en semanas. Una categoría nueva, destapada.
+      <div class="t-body" style="color: var(--fg-dim); font-size: 22px;">
+        Viral global. Contribuidores de todo el mundo en semanas. Una categoría nueva, destapada.
       </div>
-
-      <div class="panel accent-magenta" style="padding: 24px 28px; margin-top: 20px;">
-        <div class="panel-label" style="color: var(--magenta); margin-bottom: 10px;">14 FEB · 2026 · EL GIRO</div>
-        <div class="t-sub" style="font-weight: 500; margin-bottom: 10px;">Steinberger se une a <span class="neon-accent">OpenAI</span>.</div>
-        <div class="t-small" style="color: var(--fg-dim);">El proyecto pasa a una <strong style="color: var(--fg);">fundación sin fines de lucro</strong>. La comunidad toma el control. Sigue bajo licencia MIT — el software libre prevalece.</div>
+      <div class="panel accent-magenta" style="padding: 20px 24px; margin-top: 8px;">
+        <div class="panel-label" style="color: var(--magenta); margin-bottom: 8px;">14 FEB · 2026 · EL GIRO</div>
+        <div class="t-sub" style="font-weight: 500; margin-bottom: 8px; font-size: 28px;">Steinberger → <span class="neon-accent">OpenAI</span>.</div>
+        <div class="t-small" style="color: var(--fg-dim); font-size: 18px;">Fundación sin fines de lucro toma el control. Sigue MIT.</div>
       </div>
     </div>
 
-    <div style="flex: 1.2; display:flex; flex-direction:column; justify-content: center;">
-      <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;border-radius:12px;background:#fff;padding:4px;">
-        <!-- Title -->
-        <text x="340" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#333">⭐ Star History</text>
-        <!-- Y axis label -->
-        <text x="-210" y="18" transform="rotate(-90)" font-family="Arial" font-size="12" fill="#666">GitHub Stars</text>
-        <!-- X axis label -->
-        <text x="375" y="408" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Date</text>
-        <!-- Axes -->
-        <line x1="72" y1="48" x2="72" y2="368" stroke="#111" stroke-width="2"/>
-        <line x1="68" y1="368" x2="660" y2="368" stroke="#111" stroke-width="2"/>
-        <!-- Grid lines + Y labels -->
-        <line x1="72" y1="268" x2="658" y2="268" stroke="#e5e5e5" stroke-width="1"/>
-        <line x1="72" y1="168" x2="658" y2="168" stroke="#e5e5e5" stroke-width="1"/>
-        <line x1="72" y1="68" x2="658" y2="68" stroke="#e5e5e5" stroke-width="1"/>
-        <text x="64" y="372" text-anchor="end" font-family="Arial" font-size="12" fill="#555">0</text>
-        <text x="64" y="272" text-anchor="end" font-family="Arial" font-size="12" fill="#555">100K</text>
-        <text x="64" y="172" text-anchor="end" font-family="Arial" font-size="12" fill="#555">200K</text>
-        <text x="64" y="72" text-anchor="end" font-family="Arial" font-size="12" fill="#555">300K</text>
-        <!-- X labels: Dec=72, Jan=190, Feb=314, Mar=436, Apr=556, end=658 -->
-        <text x="72"  y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">December</text>
-        <text x="190" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">2026</text>
-        <text x="314" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">February</text>
-        <text x="436" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">March</text>
-        <text x="556" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">April</text>
-        <!-- Data: y = 368 - (stars/360000)*300, x mapped Dec1→72 to Apr21→658 (141d, 4.15px/d) -->
-        <!-- Dec1(d0):~1K→y=367  Jan1(d31):~2K→y=366  Feb1(d62):~5K→y=364 -->
-        <!-- Feb14(d75):~50K→y=326  Mar1(d90):~175K→y=222  Mar15(d105):~240K→y=168 -->
-        <!-- Apr1(d122):~305K→y=114  Apr15(d136):~355K→y=71 -->
-        <polygon
-          points="72,367 200,366 329,364 384,326 445,222 507,168 578,114 636,71 636,368 72,368"
-          fill="rgba(220,60,60,0.12)"/>
-        <polyline
-          points="72,367 200,366 329,364 384,326 445,222 507,168 578,114 636,71"
-          fill="none" stroke="#d63c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-        <!-- Legend -->
-        <rect x="86" y="60" width="186" height="26" fill="white" stroke="#ccc" stroke-width="1" rx="3"/>
-        <rect x="96" y="69" width="12" height="10" fill="#d63c3c" rx="2"/>
-        <text x="114" y="79" font-family="Arial" font-size="12" fill="#333">openclaw/openclaw</text>
-        <!-- Watermark -->
-        <text x="655" y="368" text-anchor="end" font-family="Arial" font-size="10" fill="#aaa">star-history.com</text>
+    <!-- Col 2: Star History chart -->
+    <div style="flex: 1.1; display:flex; flex-direction:column; justify-content: center;">
+      <svg viewBox="0 0 680 390" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;border-radius:10px;background:#fff;padding:4px;">
+        <text x="340" y="26" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#333">⭐ Star History</text>
+        <text x="-195" y="18" transform="rotate(-90)" font-family="Arial" font-size="11" fill="#666">GitHub Stars</text>
+        <text x="375" y="382" text-anchor="middle" font-family="Arial" font-size="11" fill="#666">Date</text>
+        <line x1="72" y1="44" x2="72" y2="345" stroke="#111" stroke-width="2"/>
+        <line x1="68" y1="345" x2="660" y2="345" stroke="#111" stroke-width="2"/>
+        <line x1="72" y1="252" x2="658" y2="252" stroke="#e5e5e5" stroke-width="1"/>
+        <line x1="72" y1="159" x2="658" y2="159" stroke="#e5e5e5" stroke-width="1"/>
+        <line x1="72" y1="66" x2="658" y2="66" stroke="#e5e5e5" stroke-width="1"/>
+        <text x="64" y="348" text-anchor="end" font-family="Arial" font-size="11" fill="#555">0</text>
+        <text x="64" y="255" text-anchor="end" font-family="Arial" font-size="11" fill="#555">100K</text>
+        <text x="64" y="162" text-anchor="end" font-family="Arial" font-size="11" fill="#555">200K</text>
+        <text x="64" y="69" text-anchor="end" font-family="Arial" font-size="11" fill="#555">300K</text>
+        <text x="72"  y="362" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">December</text>
+        <text x="190" y="362" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">2026</text>
+        <text x="314" y="362" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">February</text>
+        <text x="436" y="362" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">March</text>
+        <text x="556" y="362" text-anchor="middle" font-family="Arial" font-size="11" fill="#555">April</text>
+        <polygon points="72,344 200,343 329,341 384,306 445,207 507,157 578,105 636,58 636,345 72,345" fill="rgba(220,60,60,0.12)"/>
+        <polyline points="72,344 200,343 329,341 384,306 445,207 507,157 578,105 636,58" fill="none" stroke="#d63c3c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <rect x="86" y="56" width="182" height="24" fill="white" stroke="#ccc" stroke-width="1" rx="3"/>
+        <rect x="96" y="65" width="11" height="9" fill="#d63c3c" rx="2"/>
+        <text x="113" y="75" font-family="Arial" font-size="11" fill="#333">openclaw/openclaw</text>
+        <text x="655" y="345" text-anchor="end" font-family="Arial" font-size="9" fill="#aaa">star-history.com</text>
       </svg>
+    </div>
+
+    <!-- Col 3: Timeline -->
+    <div style="flex: 0.8; display:flex; flex-direction:column; justify-content: center; gap: 0;">
+      <div class="mono" style="font-size: 15px; color: var(--fg-muted); letter-spacing: 0.2em; margin-bottom: 20px;">// TIMELINE</div>
+      <div class="col" style="gap: 0; position: relative; padding-left: 28px; border-left: 2px dashed color-mix(in oklch, var(--accent) 40%, transparent);">
+        <div style="position: relative; padding: 14px 0 14px 18px;">
+          <div style="position:absolute; left:-38px; top:18px; width:16px; height:16px; border-radius:50%; background: var(--cyan); box-shadow: 0 0 16px var(--cyan);"></div>
+          <div class="mono" style="font-size: 13px; color: var(--fg-muted); letter-spacing: 0.12em;">NOV 2025</div>
+          <div class="t-sub" style="font-weight: 500; font-size: 22px;">Lanzamiento personal</div>
+        </div>
+        <div style="position: relative; padding: 14px 0 14px 18px;">
+          <div style="position:absolute; left:-38px; top:18px; width:16px; height:16px; border-radius:50%; background: var(--accent); box-shadow: 0 0 16px var(--accent);"></div>
+          <div class="mono" style="font-size: 13px; color: var(--fg-muted); letter-spacing: 0.12em;">FEB 2026</div>
+          <div class="t-sub" style="font-weight: 500; font-size: 22px;"><span class="neon-accent">+100K ⭐</span></div>
+        </div>
+        <div style="position: relative; padding: 14px 0 14px 18px;">
+          <div style="position:absolute; left:-38px; top:18px; width:16px; height:16px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 16px var(--magenta);"></div>
+          <div class="mono" style="font-size: 13px; color: var(--fg-muted); letter-spacing: 0.12em;">14 FEB 2026</div>
+          <div class="t-sub" style="font-weight: 500; font-size: 22px;">→ OpenAI · fundación</div>
+        </div>
+        <div style="position: relative; padding: 14px 0 14px 18px;">
+          <div style="position:absolute; left:-40px; top:18px; width:20px; height:20px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 24px var(--magenta); border: 2px solid var(--fg);"></div>
+          <div class="mono" style="font-size: 13px; color: var(--fg-muted); letter-spacing: 0.12em;">ABR 2026</div>
+          <div class="t-sub" style="font-weight: 500; font-size: 22px;"><span class="neon-magenta">+350K ⭐</span> viral</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
