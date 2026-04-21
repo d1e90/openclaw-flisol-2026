@@ -616,7 +616,7 @@ html, body {
       <div class="mono neon-violet" style="font-size: 48px; font-weight: 700; width: 140px;">03</div>
       <div class="grow">
         <div class="t-sub">Demo en vivo</div>
-        <div class="t-small">Equipo de agentes especializados sobre WhatsApp</div>
+        <div class="t-small">Equipo de agentes especializados sobre Telegram</div>
       </div>
       <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~7 MIN</div>
     </div>
@@ -758,30 +758,48 @@ html, body {
       </div>
     </div>
 
-    <div style="flex: 1.1; display:flex; flex-direction:column; justify-content: center; gap: 0;">
-      <div class="mono" style="font-size: 18px; color: var(--fg-muted); letter-spacing: 0.2em; margin-bottom: 24px;">// TIMELINE</div>
-      <div class="col" style="gap: 0; position: relative; padding-left: 32px; border-left: 2px dashed color-mix(in oklch, var(--accent) 40%, transparent);">
-        <div style="position: relative; padding: 18px 0 18px 20px;">
-          <div style="position:absolute; left:-42px; top:22px; width:20px; height:20px; border-radius:50%; background: var(--cyan); box-shadow: 0 0 20px var(--cyan);"></div>
-          <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em;">NOV 2025</div>
-          <div class="t-sub" style="font-weight: 500;">Lanzamiento · proyecto personal</div>
-        </div>
-        <div style="position: relative; padding: 18px 0 18px 20px;">
-          <div style="position:absolute; left:-42px; top:22px; width:20px; height:20px; border-radius:50%; background: var(--accent); box-shadow: 0 0 20px var(--accent);"></div>
-          <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em;">FEB 2026</div>
-          <div class="t-sub" style="font-weight: 500;"><span class="neon-accent">+100.000 ⭐</span> en GitHub</div>
-        </div>
-        <div style="position: relative; padding: 18px 0 18px 20px;">
-          <div style="position:absolute; left:-42px; top:22px; width:20px; height:20px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 20px var(--magenta);"></div>
-          <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em;">14 FEB 2026</div>
-          <div class="t-sub" style="font-weight: 500;">Steinberger → OpenAI · fundación toma el control</div>
-        </div>
-        <div style="position: relative; padding: 18px 0 18px 20px;">
-          <div style="position:absolute; left:-42px; top:22px; width:24px; height:24px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 30px var(--magenta); border: 2px solid var(--fg);"></div>
-          <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em;">MAR 2026</div>
-          <div class="t-sub" style="font-weight: 500;"><span class="neon-magenta">+250.000 ⭐</span> · viral global</div>
-        </div>
-      </div>
+    <div style="flex: 1.2; display:flex; flex-direction:column; justify-content: center;">
+      <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;border-radius:12px;background:#fff;padding:4px;">
+        <!-- Title -->
+        <text x="340" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#333">⭐ Star History</text>
+        <!-- Y axis label -->
+        <text x="-210" y="18" transform="rotate(-90)" font-family="Arial" font-size="12" fill="#666">GitHub Stars</text>
+        <!-- X axis label -->
+        <text x="375" y="408" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Date</text>
+        <!-- Axes -->
+        <line x1="72" y1="48" x2="72" y2="368" stroke="#111" stroke-width="2"/>
+        <line x1="68" y1="368" x2="660" y2="368" stroke="#111" stroke-width="2"/>
+        <!-- Grid lines + Y labels -->
+        <line x1="72" y1="268" x2="658" y2="268" stroke="#e5e5e5" stroke-width="1"/>
+        <line x1="72" y1="168" x2="658" y2="168" stroke="#e5e5e5" stroke-width="1"/>
+        <line x1="72" y1="68" x2="658" y2="68" stroke="#e5e5e5" stroke-width="1"/>
+        <text x="64" y="372" text-anchor="end" font-family="Arial" font-size="12" fill="#555">0</text>
+        <text x="64" y="272" text-anchor="end" font-family="Arial" font-size="12" fill="#555">100K</text>
+        <text x="64" y="172" text-anchor="end" font-family="Arial" font-size="12" fill="#555">200K</text>
+        <text x="64" y="72" text-anchor="end" font-family="Arial" font-size="12" fill="#555">300K</text>
+        <!-- X labels: Dec=72, Jan=190, Feb=314, Mar=436, Apr=556, end=658 -->
+        <text x="72"  y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">December</text>
+        <text x="190" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">2026</text>
+        <text x="314" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">February</text>
+        <text x="436" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">March</text>
+        <text x="556" y="386" text-anchor="middle" font-family="Arial" font-size="12" fill="#555">April</text>
+        <!-- Data: y = 368 - (stars/360000)*300, x mapped Dec1→72 to Apr21→658 (141d, 4.15px/d) -->
+        <!-- Dec1(d0):~1K→y=367  Jan1(d31):~2K→y=366  Feb1(d62):~5K→y=364 -->
+        <!-- Feb14(d75):~50K→y=326  Mar1(d90):~175K→y=222  Mar15(d105):~240K→y=168 -->
+        <!-- Apr1(d122):~305K→y=114  Apr15(d136):~355K→y=71 -->
+        <polygon
+          points="72,367 200,366 329,364 384,326 445,222 507,168 578,114 636,71 636,368 72,368"
+          fill="rgba(220,60,60,0.12)"/>
+        <polyline
+          points="72,367 200,366 329,364 384,326 445,222 507,168 578,114 636,71"
+          fill="none" stroke="#d63c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        <!-- Legend -->
+        <rect x="86" y="60" width="186" height="26" fill="white" stroke="#ccc" stroke-width="1" rx="3"/>
+        <rect x="96" y="69" width="12" height="10" fill="#d63c3c" rx="2"/>
+        <text x="114" y="79" font-family="Arial" font-size="12" fill="#333">openclaw/openclaw</text>
+        <!-- Watermark -->
+        <text x="655" y="368" text-anchor="end" font-family="Arial" font-size="10" fill="#aaa">star-history.com</text>
+      </svg>
     </div>
   </div>
 </section>
