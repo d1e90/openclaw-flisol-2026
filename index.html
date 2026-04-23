@@ -294,6 +294,29 @@ section[data-deck-slide="34"] { background-color: #050d16; }
 .cmp .m { color: #fbbf24; }
 .cmp tr.hl { background: color-mix(in oklch, var(--accent) 8%, var(--bg)); }
 .cmp tr.hl td { border-bottom-color: color-mix(in oklch, var(--accent) 30%, transparent); }
+
+/* ── Hero portada animations ───────────────────────────────── */
+@keyframes hfloat {
+  0%,100% { transform: translate(0,0) scale(1);           opacity: 0.65; }
+  33%     { transform: translate(20px,-38px) scale(1.15);  opacity: 1;    }
+  66%     { transform: translate(-14px,22px) scale(0.88);  opacity: 0.45; }
+}
+@keyframes hbreathe {
+  0%,100% { opacity: 0.15; transform: scale(1);    }
+  50%     { opacity: 0.30; transform: scale(1.07); }
+}
+@keyframes hpulse-ring {
+  0%,100% { opacity: 0.12; transform: translate(-50%,-50%) scale(1);    }
+  50%     { opacity: 0.26; transform: translate(-50%,-50%) scale(1.025); }
+}
+@keyframes hscan {
+  0%   { top: -4px;    opacity: 0;    }
+  5%   { opacity: 0.4; }
+  95%  { opacity: 0.4; }
+  100% { top: 1084px;  opacity: 0;    }
+}
+@keyframes horbit-cw  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+@keyframes horbit-ccw { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
 </style>
 
 <script type="application/json" id="speaker-notes">
@@ -549,6 +572,92 @@ section[data-deck-slide="34"] { background-color: #050d16; }
   <div style="position:absolute;inset:0;background:
     radial-gradient(ellipse at 30% 40%, color-mix(in oklch, var(--cyan) 18%, transparent), transparent 55%),
     radial-gradient(ellipse at 75% 65%, color-mix(in oklch, var(--magenta) 18%, transparent), transparent 55%);"></div>
+
+  <!-- ── Hero visual layer ──────────────────────────────────── -->
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;">
+
+    <!-- Atmospheric glow blobs -->
+    <div style="position:absolute;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--cyan) 13%,transparent),transparent 70%);top:-130px;left:-150px;animation:hbreathe 9s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--magenta) 11%,transparent),transparent 70%);bottom:-100px;right:-100px;animation:hbreathe 11s ease-in-out infinite;animation-delay:-4s;"></div>
+    <div style="position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--violet) 9%,transparent),transparent 70%);top:28%;right:22%;animation:hbreathe 14s ease-in-out infinite;animation-delay:-7s;"></div>
+
+    <!-- Orbit rings around logo -->
+    <div style="position:absolute;width:700px;height:700px;border-radius:50%;border:1px solid color-mix(in oklch,var(--cyan) 22%,transparent);top:50%;left:50%;animation:hpulse-ring 5s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:880px;height:880px;border-radius:50%;border:1px dashed color-mix(in oklch,var(--magenta) 14%,transparent);top:50%;left:50%;animation:hpulse-ring 7s ease-in-out infinite;animation-delay:-3s;"></div>
+
+    <!-- Orbiting dot — cyan, clockwise, r=350 -->
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-cw 18s linear infinite;">
+      <div style="position:absolute;width:6px;height:6px;top:-3px;left:350px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 30px color-mix(in oklch,var(--cyan) 55%,transparent);"></div>
+    </div>
+    <!-- Orbiting dot — magenta, counter-clockwise, r=300 -->
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-ccw 13s linear infinite;animation-delay:-5s;">
+      <div style="position:absolute;width:5px;height:5px;top:-2.5px;left:300px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 26px color-mix(in oklch,var(--magenta) 55%,transparent);"></div>
+    </div>
+    <!-- Orbiting dot — violet, clockwise, r=435 (outer ring) -->
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-cw 26s linear infinite;animation-delay:-11s;">
+      <div style="position:absolute;width:4px;height:4px;top:-2px;left:435px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 55%,transparent);"></div>
+    </div>
+
+    <!-- Scan line -->
+    <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,color-mix(in oklch,var(--cyan) 55%,transparent) 35%,color-mix(in oklch,var(--magenta) 55%,transparent) 65%,transparent 100%);animation:hscan 10s linear infinite;"></div>
+
+    <!-- Floating particles — Cyan -->
+    <div style="position:absolute;top:8%;left:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 8s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:45%;left:3%;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan),0 0 32px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 10.5s ease-in-out infinite;animation-delay:-2.5s;"></div>
+    <div style="position:absolute;top:83%;left:14%;width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan),0 0 20px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 7.5s ease-in-out infinite;animation-delay:-1.2s;"></div>
+    <div style="position:absolute;top:18%;right:8%;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 28px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-3.5s;"></div>
+    <div style="position:absolute;top:73%;right:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-0.8s;"></div>
+    <div style="position:absolute;top:33%;right:16%;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan),0 0 34px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 8.5s ease-in-out infinite;animation-delay:-4.1s;"></div>
+
+    <!-- Floating particles — Magenta -->
+    <div style="position:absolute;top:14%;left:24%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-1.8s;"></div>
+    <div style="position:absolute;top:69%;left:20%;width:4px;height:4px;border-radius:50%;background:var(--magenta);box-shadow:0 0 8px var(--magenta),0 0 20px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 7.5s ease-in-out infinite;animation-delay:-3s;"></div>
+    <div style="position:absolute;top:22%;right:24%;width:6px;height:6px;border-radius:50%;background:var(--magenta);box-shadow:0 0 12px var(--magenta),0 0 28px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-0.5s;"></div>
+    <div style="position:absolute;top:79%;right:19%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 8s ease-in-out infinite;animation-delay:-2.2s;"></div>
+
+    <!-- Floating particles — Violet -->
+    <div style="position:absolute;top:50%;left:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-4.5s;"></div>
+    <div style="position:absolute;top:56%;right:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 9.5s ease-in-out infinite;animation-delay:-1.5s;"></div>
+    <div style="position:absolute;top:88%;left:36%;width:3px;height:3px;border-radius:50%;background:var(--violet);box-shadow:0 0 6px var(--violet),0 0 16px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 12s ease-in-out infinite;animation-delay:-6s;"></div>
+    <div style="position:absolute;top:5%;right:36%;width:3px;height:3px;border-radius:50%;background:var(--violet);box-shadow:0 0 6px var(--violet),0 0 16px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-7.3s;"></div>
+
+    <!-- Left circuit decoration -->
+    <svg style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:200px;height:500px;opacity:0.18;" viewBox="0 0 200 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M200 60 H130 L90 100 V170 L55 205 H15" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M200 145 H155 L120 180 V255" stroke="#00f0ff" stroke-width="1" stroke-linecap="round"/>
+      <path d="M200 255 H110 L85 280 V365 L55 395 H15" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M200 340 H162 L142 362 V425" stroke="#ff2fb5" stroke-width="1" stroke-linecap="round"/>
+      <path d="M200 445 H130 L100 472 H15" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="130" cy="60" r="3.5" fill="#00f0ff"/>
+      <circle cx="90" cy="100" r="3.5" fill="#00f0ff"/>
+      <circle cx="55" cy="205" r="3.5" fill="#00f0ff"/>
+      <circle cx="120" cy="180" r="2.5" fill="#00f0ff" opacity="0.7"/>
+      <circle cx="110" cy="255" r="3.5" fill="#ff2fb5"/>
+      <circle cx="55" cy="395" r="3.5" fill="#ff2fb5"/>
+      <circle cx="142" cy="362" r="2.5" fill="#ff2fb5" opacity="0.7"/>
+      <circle cx="100" cy="472" r="3.5" fill="#a855f7"/>
+      <circle cx="130" cy="445" r="2.5" fill="#a855f7" opacity="0.7"/>
+    </svg>
+
+    <!-- Right circuit decoration (mirrored) -->
+    <svg style="position:absolute;top:50%;right:0;transform:translateY(-50%) scaleX(-1);width:200px;height:500px;opacity:0.18;" viewBox="0 0 200 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M200 60 H130 L90 100 V170 L55 205 H15" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M200 145 H155 L120 180 V255" stroke="#00f0ff" stroke-width="1" stroke-linecap="round"/>
+      <path d="M200 255 H110 L85 280 V365 L55 395 H15" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M200 340 H162 L142 362 V425" stroke="#ff2fb5" stroke-width="1" stroke-linecap="round"/>
+      <path d="M200 445 H130 L100 472 H15" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="130" cy="60" r="3.5" fill="#00f0ff"/>
+      <circle cx="90" cy="100" r="3.5" fill="#00f0ff"/>
+      <circle cx="55" cy="205" r="3.5" fill="#00f0ff"/>
+      <circle cx="120" cy="180" r="2.5" fill="#00f0ff" opacity="0.7"/>
+      <circle cx="110" cy="255" r="3.5" fill="#ff2fb5"/>
+      <circle cx="55" cy="395" r="3.5" fill="#ff2fb5"/>
+      <circle cx="142" cy="362" r="2.5" fill="#ff2fb5" opacity="0.7"/>
+      <circle cx="100" cy="472" r="3.5" fill="#a855f7"/>
+      <circle cx="130" cy="445" r="2.5" fill="#a855f7" opacity="0.7"/>
+    </svg>
+  </div>
+  <!-- ── /Hero visual layer ───────────────────────────────── -->
 
   <div style="position:absolute; top:60px; left:60px; right:60px; display:flex; justify-content:space-between; align-items:center; font-family:&#39;JetBrains Mono&#39;,monospace; font-size:20px; color:var(--fg-muted); letter-spacing:0.15em; text-transform:uppercase;">
     <span>FLISoL / Medellín / 2026</span>
