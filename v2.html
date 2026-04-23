@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es" style="--accent: #00f0ff; --accent-2: #ff2fb5; --glow: 0.55; --scanlines: 0.045;">
+<head>
+<meta charset="UTF-8">
+<title>De prompts a decisiones · OpenClaw — FLISoL 2026 · Diego Escobar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style id="deck-stage-print-page">@page { size: 1920px 1080px; margin: 0; } @media print { html, body { margin: 0 !important; padding: 0 !important; background: none !important; overflow: visible !important; height: auto !important; } * { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }</style>
+
+<style>
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --cyan:    #00f0ff;
+  --magenta: #ff2fb5;
+  --violet:  #a855f7;
+  --bg:      #070b14;
+  --bg-panel:#0d1424;
+  --fg:      #e2e8f0;
+  --fg-dim:  #94a3b8;
+  --fg-muted:#475569;
+  --line:    rgba(255,255,255,0.08);
+  --line-strong: rgba(255,255,255,0.18);
+  --gap-title: 48px;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin:0; padding:0; background:var(--bg); color:var(--fg); font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; height:100%; overflow:hidden; }
+
+/* ── Typography ────────────────────────────────────────────── */
+.t-hero  { font-size:200px; font-weight:800; line-height:0.95; letter-spacing:-0.02em; margin:0; }
+.t-title { font-size:76px;  font-weight:700; line-height:1.1;  letter-spacing:-0.01em; margin:0; }
+.t-sub   { font-size:46px;  font-weight:600; line-height:1.2;  margin:0; }
+.t-body  { font-size:32px;  font-weight:400; line-height:1.5;  margin:0; }
+.t-small { font-size:26px;  font-weight:400; line-height:1.5;  margin:0; }
+.mono    { font-family:'JetBrains Mono',ui-monospace,Menlo,monospace; }
+
+/* ── Neon colors ───────────────────────────────────────────── */
+.neon-cyan    { color:var(--cyan);    text-shadow:0 0 calc(var(--glow,0.55)*28px) color-mix(in oklch,var(--cyan)    70%,transparent); }
+.neon-magenta { color:var(--magenta); text-shadow:0 0 calc(var(--glow,0.55)*28px) color-mix(in oklch,var(--magenta) 70%,transparent); }
+.neon-violet  { color:var(--violet);  text-shadow:0 0 calc(var(--glow,0.55)*28px) color-mix(in oklch,var(--violet)  70%,transparent); }
+.neon-accent  { color:var(--accent);  text-shadow:0 0 calc(var(--glow,0.55)*28px) color-mix(in oklch,var(--accent)  70%,transparent); }
+
+/* ── Layout ────────────────────────────────────────────────── */
+.row  { display:flex; flex-direction:row; }
+.col  { display:flex; flex-direction:column; }
+.grow { flex:1; }
+
+/* ── Slide base ────────────────────────────────────────────── */
+.slide {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 60px 60px;
+  padding: 80px 100px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Section background tints ──────────────────────────────── */
+section[data-deck-slide="0"],
+section[data-deck-slide="1"],
+section[data-deck-slide="2"],
+section[data-deck-slide="3"] { background-color: #050d16; }
+
+section[data-deck-slide="4"],
+section[data-deck-slide="7"],
+section[data-deck-slide="8"] { background-color: #040e16; }
+
+section[data-deck-slide="5"],
+section[data-deck-slide="9"],
+section[data-deck-slide="10"] { background-color: #110609; }
+
+section[data-deck-slide="6"],
+section[data-deck-slide="11"],
+section[data-deck-slide="12"] { background-color: #08070f; }
+
+section[data-deck-slide="13"],
+section[data-deck-slide="14"],
+section[data-deck-slide="15"] { background-color: #050d16; }
+
+/* ── HUD corners ───────────────────────────────────────────── */
+.hud { position:absolute; width:22px; height:22px; pointer-events:none; }
+.hud::before,.hud::after { content:''; position:absolute; background:color-mix(in oklch,var(--accent) 65%,transparent); }
+.hud::before { width:100%; height:2px; }
+.hud::after  { width:2px; height:100%; }
+.hud.tl { top:40px; left:40px; }
+.hud.tr { top:40px; right:40px; transform:scaleX(-1); }
+.hud.bl { bottom:40px; left:40px; transform:scaleY(-1); }
+.hud.br { bottom:40px; right:40px; transform:scale(-1); }
+
+/* ── Topbar ────────────────────────────────────────────────── */
+.topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'JetBrains Mono',monospace; font-size:22px;
+  color:var(--fg-muted); letter-spacing:0.05em; margin-bottom:40px;
+}
+.topbar .section { color:var(--accent); }
+.topbar .dot     { color:var(--fg-muted); margin:0 6px; }
+.topbar .num     { color:var(--fg-dim); }
+
+/* ── Prompt ────────────────────────────────────────────────── */
+.prompt { font-family:'JetBrains Mono',monospace; font-size:34px; display:flex; align-items:baseline; gap:10px; }
+.caret { color:var(--accent); font-weight:700; }
+.caret::before { content:'>'; }
+.arg  { color:var(--fg); font-weight:600; }
+.flag { color:var(--accent-2,var(--magenta)); }
+
+/* ── Divline ───────────────────────────────────────────────── */
+.divline { width:100%; height:1px; background:linear-gradient(90deg,var(--accent) 0%,transparent 100%); opacity:0.4; }
+
+/* ── Panels ────────────────────────────────────────────────── */
+.panel { background:var(--bg-panel); border:1px solid var(--line-strong); border-radius:8px; padding:28px 32px; position:relative; }
+.panel-label { font-family:'JetBrains Mono',monospace; font-size:14px; letter-spacing:0.2em; color:var(--fg-muted); text-transform:uppercase; margin-bottom:16px; }
+.panel.accent-cyan    { border-color:color-mix(in oklch,var(--cyan)    45%,transparent); box-shadow:0 0 calc(var(--glow,0.55)*30px) color-mix(in oklch,var(--cyan)    20%,transparent); }
+.panel.accent-magenta { border-color:color-mix(in oklch,var(--magenta) 45%,transparent); box-shadow:0 0 calc(var(--glow,0.55)*30px) color-mix(in oklch,var(--magenta) 20%,transparent); }
+.panel.accent-violet  { border-color:color-mix(in oklch,var(--violet)  45%,transparent); box-shadow:0 0 calc(var(--glow,0.55)*30px) color-mix(in oklch,var(--violet)  20%,transparent); }
+
+/* ── Chip ──────────────────────────────────────────────────── */
+.chip {
+  display:inline-flex; align-items:center; padding:6px 16px; border-radius:999px;
+  font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:500;
+  border:1px solid var(--line-strong); color:var(--fg-dim); background:var(--bg-panel); letter-spacing:0.04em;
+}
+.chip.active { border-color:color-mix(in oklch,var(--accent) 55%,transparent); color:var(--accent); background:color-mix(in oklch,var(--accent) 8%,var(--bg-panel)); }
+
+/* ── Footer tagline ────────────────────────────────────────── */
+.tagline {
+  position:absolute; bottom:60px; left:100px; right:100px;
+  border-top:1px solid var(--line-strong); padding-top:20px;
+  font-family:'JetBrains Mono',monospace; font-size:24px;
+  color:var(--fg-dim); font-style:italic; text-align:center; letter-spacing:0.04em;
+}
+
+/* ── Hero portada animations ───────────────────────────────── */
+@keyframes hfloat {
+  0%,100% { transform:translate(0,0) scale(1);           opacity:0.65; }
+  33%     { transform:translate(20px,-38px) scale(1.15);  opacity:1;    }
+  66%     { transform:translate(-14px,22px) scale(0.88);  opacity:0.45; }
+}
+@keyframes hbreathe {
+  0%,100% { opacity:0.15; transform:scale(1);    }
+  50%     { opacity:0.30; transform:scale(1.07); }
+}
+@keyframes hpulse-ring {
+  0%,100% { opacity:0.12; transform:translate(-50%,-50%) scale(1);    }
+  50%     { opacity:0.26; transform:translate(-50%,-50%) scale(1.025); }
+}
+@keyframes hscan {
+  0%   { top:-4px;   opacity:0;   }
+  5%   { opacity:0.4; }
+  95%  { opacity:0.4; }
+  100% { top:1084px; opacity:0;   }
+}
+@keyframes horbit-cw  { from { transform:rotate(0deg);   } to { transform:rotate(360deg);  } }
+@keyframes horbit-ccw { from { transform:rotate(0deg);   } to { transform:rotate(-360deg); } }
+</style>
+
+<script type="application/json" id="speaker-notes">
+[
+"Bienvenidos. En los próximos 30 minutos vamos a hablar de un cambio de mentalidad: dejar de usar la IA como un buscador mejorado, y empezar a construir agentes que trabajan por nosotros. OpenClaw es la herramienta que hace eso posible, open source y en tu propia infraestructura.",
+"La mayoría está usando la IA como un chatbot sofisticado. Le preguntan, reciben una respuesta, y ellos la ejecutan. Eso está bien para empezar. Pero no escala. El verdadero cambio viene cuando el sistema entiende objetivos, toma decisiones y actúa por sí mismo.",
+"La evolución es clara. Los LLMs saben hablar. Con herramientas, pueden llamar APIs. Cuando les agregas memoria, contexto y autonomía, se convierten en agentes. Cada paso reduce cuánto tiene que intervenir un humano.",
+"Un agente no es un chatbot con más opciones. Es un sistema que tiene un objetivo claro, memoria de lo que pasó, herramientas para actuar, y la autonomía para decidir cuándo y cómo usarlas.",
+"Aquí entra OpenClaw. Es el arnés que conecta un modelo de lenguaje con el mundo real: le da acceso al sistema, persistencia entre sesiones, y canales para comunicarse. Sin el arnés, el modelo es brillante pero inútil en producción.",
+"Con más poder viene más responsabilidad. Un agente con acceso a archivos, APIs y capacidad de tomar decisiones autónomas es poderoso y también peligroso si no está bien diseñado. El problema no es si va a fallar — es cómo fallará.",
+"El ciclo de un agente es: recibe un input, razona sobre él, decide qué herramienta usar, ejecuta, y guarda el resultado en memoria para la siguiente iteración. El poder no está en el modelo. Está en el ciclo.",
+"La diferencia clave de OpenClaw: no está en una caja de terceros. Corre en tu infraestructura, con acceso real al sistema, con estado persistente entre sesiones, y con impacto real en el entorno. No es un asistente — es un operador.",
+"Para diseñar un agente necesitas definir tres cosas: su Capability (qué puede hacer), su Identity (quién es, su tono y propósito), y su Knowledge (qué sabe de tu negocio). Esto es el modelo CIK.",
+"Esto ya está pasando. Los agentes son vectores de ataque. Prompt injection, exfiltración de datos a través de herramientas, y manipulación de decisiones son amenazas reales que debes considerar desde el diseño.",
+"Un agente que no puedes controlar no deberías desplegarlo. Control de herramientas, validación de inputs, auditoría de decisiones y capas de seguridad no son opcionales — son parte del diseño desde el inicio.",
+"Un agente solo ejecuta. Un sistema de agentes piensa. Cuando tienes roles especializados — un orquestador, agentes de ventas, soporte, operaciones — con evaluación entre ellos, tienes algo que escala de verdad.",
+"El valor ya es real: operaciones que se automatizan solas, decisiones que se toman más rápido con el contexto correcto, sistemas que corren sin intervención humana constante. La diferencia ya no es quién usa IA — es quién delega mejor.",
+"Demo: objetivo claro, decisión del agente, ejecución autónoma. Sin humano en el loop para cada paso. El agente recibe el objetivo, decide el camino, y entrega el resultado.",
+"El cambio mental es simple pero profundo: pasar de pedir respuestas a definir objetivos, de ejecutar manualmente a supervisar, de escalar personas a escalar sistemas. Ahí empieza la transformación real.",
+"El futuro pertenece a quienes diseñan agentes. No a quienes solo los usan. Gracias por estar aquí. Quedo atento a sus preguntas."
+]
+</script>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080"><template shadowrootmode="open"><style>
+    :host { position:fixed; inset:0; display:block; background:#000; color:#fff; font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif; overflow:hidden; }
+    .stage { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+    .canvas { position:relative; transform-origin:center center; flex-shrink:0; background:#fff; will-change:transform; }
+    ::slotted(*) { position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; box-sizing:border-box !important; overflow:hidden; opacity:0; pointer-events:none; visibility:hidden; }
+    ::slotted([data-deck-active]) { opacity:1; pointer-events:auto; visibility:visible; }
+    .tapzones { position:fixed; inset:0; display:flex; z-index:2147482000; pointer-events:none; }
+    .tapzone { flex:1; pointer-events:auto; -webkit-tap-highlight-color:transparent; }
+    @media (hover:hover) and (pointer:fine) { .tapzones { display:none; } }
+    .overlay { position:fixed; left:50%; bottom:22px; transform:translate(-50%,6px) scale(0.92); filter:blur(6px); display:flex; align-items:center; gap:4px; padding:4px; background:#000; color:#fff; border-radius:999px; font-size:12px; font-feature-settings:"tnum" 1; letter-spacing:0.01em; opacity:0; pointer-events:none; transition:opacity 260ms ease,transform 260ms cubic-bezier(.2,.8,.2,1),filter 260ms ease; transform-origin:center bottom; z-index:2147483000; user-select:none; }
+    .overlay[data-visible] { opacity:1; pointer-events:auto; transform:translate(-50%,0) scale(1); filter:blur(0); }
+    .btn { appearance:none; -webkit-appearance:none; background:transparent; border:0; margin:0; padding:0; color:inherit; font:inherit; cursor:default; display:inline-flex; align-items:center; justify-content:center; height:28px; min-width:28px; border-radius:999px; color:rgba(255,255,255,0.72); transition:background 140ms ease,color 140ms ease; -webkit-tap-highlight-color:transparent; }
+    .btn:hover { background:rgba(255,255,255,0.12); color:#fff; }
+    .btn:active { background:rgba(255,255,255,0.18); }
+    .btn:focus,.btn:focus-visible { outline:none; }
+    .btn svg { width:14px; height:14px; display:block; }
+    .btn.reset { font-size:11px; font-weight:500; letter-spacing:0.02em; padding:0 10px 0 12px; gap:6px; color:rgba(255,255,255,0.72); }
+    .btn.reset .kbd { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 4px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:10px; line-height:1; color:rgba(255,255,255,0.88); background:rgba(255,255,255,0.12); border-radius:4px; }
+    .count { font-variant-numeric:tabular-nums; color:#fff; font-size:12px; padding:0 6px; display:flex; align-items:center; gap:2px; }
+    .count .sep { color:rgba(255,255,255,0.35); }
+    .count .total { color:rgba(255,255,255,0.55); }
+    .divider { width:1px; height:14px; background:rgba(255,255,255,0.18); margin:0 2px; }
+    @media print {
+      :host { position:static; inset:auto; background:none; overflow:visible; color:inherit; }
+      .stage { position:static; display:block; }
+      .canvas { transform:none !important; width:auto !important; height:auto !important; background:none; will-change:auto; }
+      ::slotted(*) { position:relative !important; inset:auto !important; width:var(--deck-design-w) !important; height:var(--deck-design-h) !important; box-sizing:border-box !important; opacity:1 !important; visibility:visible !important; pointer-events:auto; break-after:page; page-break-after:always; break-inside:avoid; overflow:hidden; }
+      ::slotted(*:last-child) { break-after:auto; page-break-after:auto; }
+      .overlay,.tapzones { display:none !important; }
+    }
+  </style><div class="stage"><div class="canvas" style="width:1920px;height:1080px;--deck-design-w:1920px;--deck-design-h:1080px;"><slot></slot></div></div><div class="tapzones" aria-hidden="true"><div class="tapzone tapzone--back"></div><div class="tapzone tapzone--mid" style="pointer-events:none;"></div><div class="tapzone tapzone--fwd"></div></div><div class="overlay" role="toolbar" aria-label="Deck controls">
+    <button class="btn prev" type="button" aria-label="Previous slide" title="Previous (←)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>
+    </button>
+    <span class="count" aria-live="polite"><span class="current">1</span><span class="sep">/</span><span class="total">16</span></span>
+    <button class="btn next" type="button" aria-label="Next slide" title="Next (→)">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
+    </button>
+    <span class="divider"></span>
+    <button class="btn reset" type="button" aria-label="Reset to first slide" title="Reset (R)">Reset<span class="kbd">R</span></button>
+  </div></template>
+
+<!-- ════════════════════════════════════════════════════════════
+     01 · PORTADA
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Portada" class="slide" style="padding:0;justify-content:center;align-items:center;" data-screen-label="01 Portada" data-deck-slide="0" data-deck-active="">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:
+    radial-gradient(ellipse at 28% 42%, color-mix(in oklch,var(--cyan) 18%,transparent), transparent 55%),
+    radial-gradient(ellipse at 76% 62%, color-mix(in oklch,var(--magenta) 18%,transparent), transparent 55%);"></div>
+
+  <!-- Hero layer -->
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;">
+    <div style="position:absolute;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--cyan) 13%,transparent),transparent 70%);top:-130px;left:-150px;animation:hbreathe 9s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--magenta) 11%,transparent),transparent 70%);bottom:-100px;right:-100px;animation:hbreathe 11s ease-in-out infinite;animation-delay:-4s;"></div>
+    <div style="position:absolute;width:700px;height:700px;border-radius:50%;border:1px solid color-mix(in oklch,var(--cyan) 22%,transparent);top:50%;left:50%;animation:hpulse-ring 5s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:880px;height:880px;border-radius:50%;border:1px dashed color-mix(in oklch,var(--magenta) 14%,transparent);top:50%;left:50%;animation:hpulse-ring 7s ease-in-out infinite;animation-delay:-3s;"></div>
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-cw 18s linear infinite;">
+      <div style="position:absolute;width:6px;height:6px;top:-3px;left:350px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 30px color-mix(in oklch,var(--cyan) 55%,transparent);"></div>
+    </div>
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-ccw 13s linear infinite;animation-delay:-5s;">
+      <div style="position:absolute;width:5px;height:5px;top:-2.5px;left:300px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 26px color-mix(in oklch,var(--magenta) 55%,transparent);"></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,color-mix(in oklch,var(--cyan) 55%,transparent) 35%,color-mix(in oklch,var(--magenta) 55%,transparent) 65%,transparent);animation:hscan 10s linear infinite;"></div>
+    <div style="position:absolute;top:8%;left:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 8s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:45%;left:3%;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan),0 0 32px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 10.5s ease-in-out infinite;animation-delay:-2.5s;"></div>
+    <div style="position:absolute;top:18%;right:8%;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 28px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-3.5s;"></div>
+    <div style="position:absolute;top:73%;right:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-0.8s;"></div>
+    <div style="position:absolute;top:14%;left:24%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-1.8s;"></div>
+    <div style="position:absolute;top:22%;right:24%;width:6px;height:6px;border-radius:50%;background:var(--magenta);box-shadow:0 0 12px var(--magenta),0 0 28px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-0.5s;"></div>
+    <div style="position:absolute;top:79%;right:19%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 8s ease-in-out infinite;animation-delay:-2.2s;"></div>
+    <div style="position:absolute;top:50%;left:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-4.5s;"></div>
+    <div style="position:absolute;top:56%;right:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 9.5s ease-in-out infinite;animation-delay:-1.5s;"></div>
+    <svg style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:170px;height:440px;opacity:0.16;" viewBox="0 0 170 440" fill="none">
+      <path d="M170 55 H110 L78 88 V165 L45 198 H12" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M170 228 H94 L70 252 V328 L44 358 H12" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M170 390 H112 L88 414 H12" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="110" cy="55" r="3.5" fill="#00f0ff"/><circle cx="78" cy="88" r="3.5" fill="#00f0ff"/><circle cx="45" cy="198" r="3.5" fill="#00f0ff"/>
+      <circle cx="94" cy="228" r="3.5" fill="#ff2fb5"/><circle cx="44" cy="358" r="3.5" fill="#ff2fb5"/>
+      <circle cx="88" cy="414" r="3.5" fill="#a855f7"/>
+    </svg>
+    <svg style="position:absolute;top:50%;right:0;transform:translateY(-50%) scaleX(-1);width:170px;height:440px;opacity:0.16;" viewBox="0 0 170 440" fill="none">
+      <path d="M170 55 H110 L78 88 V165 L45 198 H12" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M170 228 H94 L70 252 V328 L44 358 H12" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M170 390 H112 L88 414 H12" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="110" cy="55" r="3.5" fill="#00f0ff"/><circle cx="78" cy="88" r="3.5" fill="#00f0ff"/><circle cx="45" cy="198" r="3.5" fill="#00f0ff"/>
+      <circle cx="94" cy="228" r="3.5" fill="#ff2fb5"/><circle cx="44" cy="358" r="3.5" fill="#ff2fb5"/>
+      <circle cx="88" cy="414" r="3.5" fill="#a855f7"/>
+    </svg>
+  </div>
+
+  <div style="position:absolute;top:60px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--fg-muted);letter-spacing:0.15em;text-transform:uppercase;">
+    <span>FLISoL / Medellín / 2026</span>
+    <span class="neon-accent">// TALK_02</span>
+  </div>
+
+  <div style="position:relative;z-index:2;text-align:center;padding:0 100px;">
+    <div class="mono" style="font-size:26px;color:var(--fg-dim);letter-spacing:0.3em;margin-bottom:28px;">
+      <span style="color:var(--accent-2);">&gt;</span> ./openclaw <span style="color:var(--accent);">--agents</span>
+    </div>
+    <img src="assets/Heros.png" alt="" style="height:148px;width:auto;margin:0 auto 14px;display:block;filter:drop-shadow(0 0 32px rgba(0,240,255,0.4)) drop-shadow(0 0 60px rgba(255,47,181,0.3));">
+    <div class="t-title neon-cyan"  style="font-size:100px;line-height:1.0;letter-spacing:-0.02em;">De prompts</div>
+    <div class="t-title neon-magenta" style="font-size:100px;line-height:1.0;letter-spacing:-0.02em;">a decisiones</div>
+    <div class="divline" style="width:540px;margin:22px auto 22px;"></div>
+    <div class="t-sub" style="color:var(--fg);font-weight:400;margin-bottom:16px;">
+      Cómo construir agentes que ejecutan con OpenClaw
+    </div>
+    <div class="mono" style="font-size:22px;color:var(--fg-muted);font-style:italic;letter-spacing:0.1em;">
+      La diferencia entre responder… y actuar
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:60px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:end;font-family:'JetBrains Mono',monospace;">
+    <div>
+      <div style="color:var(--fg-dim);font-size:16px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Speaker</div>
+      <div style="color:var(--fg);font-size:26px;">Diego Escobar</div>
+      <div style="color:var(--fg-dim);font-size:18px;margin-top:4px;">Especialista IA · Innovación · Transformación Digital</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="color:var(--fg-dim);font-size:16px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Session</div>
+      <div style="color:var(--accent);font-size:22px;">30:00 · LIVE</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     02 · ROMPER PARADIGMA
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Paradigma" class="slide" data-screen-label="02 Paradigma" data-deck-slide="1">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// PARADIGMA</span> <span class="dot">·</span> El problema</span>
+    <span class="num">2 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:52px;">
+    La mayoría está usando <span class="neon-magenta">mal</span> la IA
+  </div>
+
+  <div class="row grow" style="gap:0;align-items:stretch;">
+    <!-- Left: today (dim) -->
+    <div style="flex:1;padding:40px;background:color-mix(in oklch,var(--bg-panel) 60%,transparent);border:1px solid var(--line);border-radius:8px;opacity:0.55;">
+      <div class="mono" style="font-size:18px;letter-spacing:0.25em;color:var(--fg-muted);margin-bottom:28px;">CÓMO SE USA HOY</div>
+      <div class="col" style="gap:36px;">
+        <div>
+          <div class="mono" style="font-size:28px;color:var(--fg-muted);margin-bottom:8px;">▸ Chat</div>
+          <div class="t-body" style="color:var(--fg-muted);">Conversación puntual, sin memoria</div>
+        </div>
+        <div>
+          <div class="mono" style="font-size:28px;color:var(--fg-muted);margin-bottom:8px;">▸ Prompts</div>
+          <div class="t-body" style="color:var(--fg-muted);">Preguntas manuales, una por una</div>
+        </div>
+        <div>
+          <div class="mono" style="font-size:28px;color:var(--fg-muted);margin-bottom:8px;">▸ Respuestas</div>
+          <div class="t-body" style="color:var(--fg-muted);">Texto que tú mismo ejecutas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VS divider -->
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100px;flex-shrink:0;gap:16px;">
+      <div style="width:1px;flex:1;background:linear-gradient(180deg,transparent,var(--line-strong) 50%,transparent);"></div>
+      <div class="mono" style="font-size:20px;color:var(--fg-muted);letter-spacing:0.2em;writing-mode:horizontal-tb;">VS</div>
+      <div style="width:1px;flex:1;background:linear-gradient(180deg,var(--line-strong),transparent);"></div>
+    </div>
+
+    <!-- Right: game changer (neon) -->
+    <div style="flex:1;padding:40px;background:color-mix(in oklch,var(--cyan) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--cyan) 12%,transparent);">
+      <div class="mono neon-cyan" style="font-size:18px;letter-spacing:0.25em;margin-bottom:28px;">LO QUE CAMBIA EL JUEGO</div>
+      <div class="col" style="gap:36px;">
+        <div>
+          <div class="mono neon-cyan" style="font-size:28px;margin-bottom:8px;">◈ Objetivos</div>
+          <div class="t-body" style="color:var(--fg-dim);">El agente entiende el propósito completo</div>
+        </div>
+        <div>
+          <div class="mono neon-magenta" style="font-size:28px;margin-bottom:8px;">◈ Decisiones</div>
+          <div class="t-body" style="color:var(--fg-dim);">Razona y elige el camino sin que le pidas</div>
+        </div>
+        <div>
+          <div class="mono neon-violet" style="font-size:28px;margin-bottom:8px;">◈ Acciones</div>
+          <div class="t-body" style="color:var(--fg-dim);">Ejecuta, sin esperar tu instrucción</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     03 · EVOLUCIÓN
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Evolucion" class="slide" data-screen-label="03 Evolución" data-deck-slide="2">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// PARADIGMA</span> <span class="dot">·</span> Evolución</span>
+    <span class="num">3 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:var(--gap-title);">
+    La evolución de la <span class="neon-cyan">IA</span>
+  </div>
+
+  <div class="row grow" style="align-items:center;gap:24px;">
+    <!-- LLM -->
+    <div class="col" style="flex:1;gap:20px;">
+      <div style="padding:48px 36px;background:var(--bg-panel);border:1px solid var(--line-strong);border-radius:8px;text-align:center;opacity:0.65;">
+        <div class="mono" style="font-size:14px;letter-spacing:0.3em;color:var(--fg-muted);margin-bottom:20px;">FASE 01</div>
+        <div class="t-title" style="font-size:60px;color:var(--fg-dim);margin-bottom:24px;">LLM</div>
+        <div style="border-top:1px solid var(--line);padding-top:20px;">
+          <div class="mono" style="font-size:22px;color:var(--fg-muted);margin-bottom:8px;">Responde</div>
+          <div class="mono" style="font-size:22px;color:var(--fg-muted);">Lenguaje</div>
+        </div>
+      </div>
+      <div class="t-small" style="color:var(--fg-muted);text-align:center;font-style:italic;">Sabe hablar</div>
+    </div>
+
+    <div class="mono neon-cyan" style="font-size:52px;flex-shrink:0;">→</div>
+
+    <!-- Tools -->
+    <div class="col" style="flex:1;gap:20px;">
+      <div style="padding:48px 36px;background:color-mix(in oklch,var(--bg-panel) 80%,var(--cyan) 5%);border:1px solid color-mix(in oklch,var(--cyan) 30%,transparent);border-radius:8px;text-align:center;opacity:0.82;">
+        <div class="mono neon-cyan" style="font-size:14px;letter-spacing:0.3em;margin-bottom:20px;">FASE 02</div>
+        <div class="t-title neon-cyan" style="font-size:60px;margin-bottom:24px;">Tools</div>
+        <div style="border-top:1px solid color-mix(in oklch,var(--cyan) 30%,transparent);padding-top:20px;">
+          <div class="mono" style="font-size:22px;color:var(--fg-dim);margin-bottom:8px;">Ejecuta</div>
+          <div class="mono" style="font-size:22px;color:var(--fg-dim);">APIs</div>
+        </div>
+      </div>
+      <div class="t-small" style="color:var(--fg-dim);text-align:center;font-style:italic;">Puede actuar</div>
+    </div>
+
+    <div class="mono neon-magenta" style="font-size:52px;flex-shrink:0;">→</div>
+
+    <!-- Agents -->
+    <div class="col" style="flex:1;gap:20px;">
+      <div style="padding:48px 36px;background:color-mix(in oklch,var(--bg-panel) 60%,var(--magenta) 8%);border:1px solid color-mix(in oklch,var(--magenta) 45%,transparent);border-radius:8px;text-align:center;box-shadow:0 0 50px color-mix(in oklch,var(--magenta) 18%,transparent);">
+        <div class="mono neon-magenta" style="font-size:14px;letter-spacing:0.3em;margin-bottom:20px;">FASE 03</div>
+        <div class="t-title neon-magenta" style="font-size:60px;margin-bottom:24px;">Agents</div>
+        <div style="border-top:1px solid color-mix(in oklch,var(--magenta) 30%,transparent);padding-top:20px;">
+          <div class="mono" style="font-size:22px;color:var(--fg);margin-bottom:8px;">Decide</div>
+          <div class="mono" style="font-size:22px;color:var(--fg);margin-bottom:8px;">Ejecuta</div>
+          <div class="mono" style="font-size:22px;color:var(--fg);">Aprende</div>
+        </div>
+      </div>
+      <div class="t-small neon-magenta" style="text-align:center;font-style:italic;font-weight:600;">Piensa y actúa</div>
+    </div>
+  </div>
+
+  <div class="tagline">Cada paso reduce la intervención humana</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     04 · DEFINICIÓN REAL
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Definicion" class="slide" data-screen-label="04 Definición" data-deck-slide="3">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// AGENTE</span> <span class="dot">·</span> Definición</span>
+    <span class="num">4 / 16</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom:var(--gap-title);">
+    <span class="caret"></span><span class="arg">define</span> <span class="flag">agent</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:56px;">
+    Un agente no es un <span class="neon-magenta">chatbot</span>
+  </div>
+
+  <div class="row grow" style="gap:28px;align-items:stretch;">
+    <div class="panel accent-cyan" style="flex:1;">
+      <div class="mono neon-cyan" style="font-size:40px;font-weight:700;margin-bottom:12px;">01</div>
+      <div class="t-sub" style="margin-bottom:12px;">Objetivo</div>
+      <div class="t-body" style="color:var(--fg-dim);">Tiene un propósito definido, no solo responde preguntas</div>
+    </div>
+    <div class="panel accent-magenta" style="flex:1;">
+      <div class="mono neon-magenta" style="font-size:40px;font-weight:700;margin-bottom:12px;">02</div>
+      <div class="t-sub" style="margin-bottom:12px;">Memoria</div>
+      <div class="t-body" style="color:var(--fg-dim);">Recuerda el contexto entre sesiones e iteraciones</div>
+    </div>
+    <div class="panel accent-violet" style="flex:1;">
+      <div class="mono neon-violet" style="font-size:40px;font-weight:700;margin-bottom:12px;">03</div>
+      <div class="t-sub" style="margin-bottom:12px;">Herramientas</div>
+      <div class="t-body" style="color:var(--fg-dim);">Puede llamar APIs, leer archivos, ejecutar código</div>
+    </div>
+    <div class="panel" style="flex:1;border-color:color-mix(in oklch,var(--cyan) 35%,transparent);box-shadow:0 0 30px color-mix(in oklch,var(--cyan) 15%,transparent);">
+      <div class="mono neon-accent" style="font-size:40px;font-weight:700;margin-bottom:12px;">04</div>
+      <div class="t-sub" style="margin-bottom:12px;">Autonomía</div>
+      <div class="t-body" style="color:var(--fg-dim);">Decide cuándo y cómo actuar sin esperar instrucciones</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     05 · INTRODUCCIÓN A OpenClaw
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="OpenClaw" class="slide" data-screen-label="05 OpenClaw" data-deck-slide="4">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 40%,color-mix(in oklch,var(--cyan) 10%,transparent),transparent 60%);"></div>
+
+  <div class="topbar" style="position:relative;z-index:1;">
+    <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Introducción</span>
+    <span class="num">5 / 16</span>
+  </div>
+
+  <div class="row grow" style="align-items:center;gap:80px;position:relative;z-index:1;">
+    <div class="col" style="flex:1;gap:32px;">
+      <div class="t-title" style="line-height:1.1;">
+        Donde esto se vuelve <span class="neon-cyan">real</span>
+      </div>
+      <div class="divline"></div>
+      <div class="t-body" style="color:var(--fg-dim);max-width:700px;">
+        OpenClaw es el arnés que convierte un modelo de lenguaje en un agente operativo: con acceso al sistema, estado persistente y canales reales.
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <span class="chip active">MIT License</span>
+        <span class="chip active">Self-hosted</span>
+        <span class="chip active">Open Source</span>
+      </div>
+    </div>
+
+    <div class="col" style="flex:0 0 520px;gap:20px;">
+      <div class="panel accent-cyan">
+        <div class="mono neon-cyan" style="font-size:16px;letter-spacing:0.2em;margin-bottom:12px;">◈ ACCESO AL SISTEMA</div>
+        <div class="t-body" style="color:var(--fg-dim);">Archivos, APIs, bases de datos, procesos reales</div>
+      </div>
+      <div class="panel accent-magenta">
+        <div class="mono neon-magenta" style="font-size:16px;letter-spacing:0.2em;margin-bottom:12px;">◈ PERSISTENCIA</div>
+        <div class="t-body" style="color:var(--fg-dim);">Memoria entre sesiones, estado por usuario</div>
+      </div>
+      <div class="panel accent-violet">
+        <div class="mono neon-violet" style="font-size:16px;letter-spacing:0.2em;margin-bottom:12px;">◈ EJECUCIÓN REAL</div>
+        <div class="t-body" style="color:var(--fg-dim);">No simula acciones — las realiza</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline" style="font-style:normal;color:var(--accent);">No simula acciones… actúa</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     06 · RIESGO
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Riesgo" class="slide" data-screen-label="06 Riesgo" data-deck-slide="5">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,color-mix(in oklch,var(--magenta) 12%,transparent),transparent 65%);"></div>
+
+  <div class="topbar" style="position:relative;z-index:1;">
+    <span><span class="section" style="color:var(--magenta);">// RIESGO</span> <span class="dot">·</span> El precio del poder</span>
+    <span class="num">6 / 16</span>
+  </div>
+
+  <div class="t-title" style="position:relative;z-index:1;margin-bottom:var(--gap-title);">
+    Más poder <span class="neon-magenta">=</span> más riesgo
+  </div>
+
+  <div class="row grow" style="gap:32px;align-items:stretch;position:relative;z-index:1;">
+    <div style="flex:1;padding:40px 36px;background:color-mix(in oklch,var(--magenta) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 35%,transparent);border-radius:8px;">
+      <div class="mono" style="font-size:48px;color:var(--magenta);margin-bottom:16px;line-height:1;">⚠</div>
+      <div class="t-sub" style="margin-bottom:16px;">Acceso a archivos</div>
+      <div class="t-body" style="color:var(--fg-dim);">El agente puede leer, modificar y eliminar datos críticos si no está acotado</div>
+    </div>
+    <div style="flex:1;padding:40px 36px;background:color-mix(in oklch,var(--magenta) 8%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 45%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--magenta) 15%,transparent);">
+      <div class="mono" style="font-size:48px;color:var(--magenta);margin-bottom:16px;line-height:1;">⚠</div>
+      <div class="t-sub" style="margin-bottom:16px;">Acceso a APIs</div>
+      <div class="t-body" style="color:var(--fg-dim);">Puede ejecutar llamadas externas, gastar créditos, enviar mensajes a tu nombre</div>
+    </div>
+    <div style="flex:1;padding:40px 36px;background:color-mix(in oklch,var(--magenta) 11%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 55%,transparent);border-radius:8px;box-shadow:0 0 60px color-mix(in oklch,var(--magenta) 20%,transparent);">
+      <div class="mono" style="font-size:48px;color:var(--magenta);margin-bottom:16px;line-height:1;">⚠</div>
+      <div class="t-sub" style="margin-bottom:16px;">Decisiones autónomas</div>
+      <div class="t-body" style="color:var(--fg-dim);">Sin supervisión, puede tomar caminos inesperados con impacto real</div>
+    </div>
+  </div>
+
+  <div class="tagline" style="border-color:color-mix(in oklch,var(--magenta) 30%,transparent);color:var(--magenta);">
+    El problema no es si falla… es cómo fallará
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     07 · ARQUITECTURA DEL AGENTE
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Arquitectura" class="slide" data-screen-label="07 Arquitectura" data-deck-slide="6">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// ARQUITECTURA</span> <span class="dot">·</span> El ciclo del agente</span>
+    <span class="num">7 / 16</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom:var(--gap-title);">
+    <span class="caret"></span><span class="arg">agent</span> <span class="flag">--trace</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:52px;">
+    Cómo funciona <span class="neon-cyan">realmente</span> un agente
+  </div>
+
+  <!-- Loop diagram -->
+  <div class="row grow" style="align-items:center;justify-content:center;gap:0;">
+    <!-- Steps -->
+    <div style="display:flex;flex-direction:column;gap:0;flex:1;max-width:1500px;">
+      <!-- Top row: Input → Reasoning → Tool Use -->
+      <div class="row" style="gap:0;align-items:center;justify-content:center;margin-bottom:12px;">
+        <div style="flex:1;padding:28px 20px;text-align:center;background:color-mix(in oklch,var(--cyan) 8%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 35%,transparent);border-radius:8px;">
+          <div class="mono neon-cyan" style="font-size:15px;letter-spacing:0.2em;margin-bottom:8px;">01</div>
+          <div class="t-body" style="font-weight:600;">INPUT</div>
+          <div class="t-small" style="color:var(--fg-dim);margin-top:6px;">Mensaje / evento / trigger</div>
+        </div>
+        <div class="mono neon-cyan" style="font-size:36px;padding:0 16px;">→</div>
+        <div style="flex:1;padding:28px 20px;text-align:center;background:color-mix(in oklch,var(--cyan) 10%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:8px;">
+          <div class="mono neon-cyan" style="font-size:15px;letter-spacing:0.2em;margin-bottom:8px;">02</div>
+          <div class="t-body" style="font-weight:600;">REASONING</div>
+          <div class="t-small" style="color:var(--fg-dim);margin-top:6px;">LLM analiza y decide</div>
+        </div>
+        <div class="mono neon-cyan" style="font-size:36px;padding:0 16px;">→</div>
+        <div style="flex:1;padding:28px 20px;text-align:center;background:color-mix(in oklch,var(--magenta) 8%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 35%,transparent);border-radius:8px;">
+          <div class="mono neon-magenta" style="font-size:15px;letter-spacing:0.2em;margin-bottom:8px;">03</div>
+          <div class="t-body" style="font-weight:600;">TOOL USE</div>
+          <div class="t-small" style="color:var(--fg-dim);margin-top:6px;">Selecciona herramienta</div>
+        </div>
+        <div class="mono neon-magenta" style="font-size:36px;padding:0 16px;">→</div>
+        <div style="flex:1;padding:28px 20px;text-align:center;background:color-mix(in oklch,var(--magenta) 10%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 40%,transparent);border-radius:8px;">
+          <div class="mono neon-magenta" style="font-size:15px;letter-spacing:0.2em;margin-bottom:8px;">04</div>
+          <div class="t-body" style="font-weight:600;">EXECUTION</div>
+          <div class="t-small" style="color:var(--fg-dim);margin-top:6px;">Ejecuta la acción real</div>
+        </div>
+        <div class="mono neon-violet" style="font-size:36px;padding:0 16px;">→</div>
+        <div style="flex:1;padding:28px 20px;text-align:center;background:color-mix(in oklch,var(--violet) 10%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--violet) 40%,transparent);border-radius:8px;box-shadow:0 0 30px color-mix(in oklch,var(--violet) 18%,transparent);">
+          <div class="mono neon-violet" style="font-size:15px;letter-spacing:0.2em;margin-bottom:8px;">05</div>
+          <div class="t-body" style="font-weight:600;">MEMORY</div>
+          <div class="t-small" style="color:var(--fg-dim);margin-top:6px;">Guarda resultado</div>
+        </div>
+      </div>
+      <!-- Return arrow -->
+      <div style="display:flex;justify-content:flex-end;padding-right:0;">
+        <div style="width:calc(100% - 60px);display:flex;align-items:center;gap:0;">
+          <div class="mono neon-violet" style="font-size:28px;flex-shrink:0;">↺</div>
+          <div style="flex:1;height:2px;background:linear-gradient(90deg,color-mix(in oklch,var(--violet) 50%,transparent),color-mix(in oklch,var(--cyan) 50%,transparent));border-radius:1px;opacity:0.5;margin:0 8px;"></div>
+          <div class="mono" style="font-size:18px;color:var(--fg-muted);letter-spacing:0.1em;">nuevo ciclo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline">El poder no está en el modelo… está en el ciclo</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     08 · DIFERENCIACIÓN OPENCLAW
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Diferenciacion" class="slide" data-screen-label="08 Diferenciación" data-deck-slide="7">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 55%,color-mix(in oklch,var(--cyan) 10%,transparent),transparent 60%);"></div>
+
+  <div class="topbar" style="position:relative;z-index:1;">
+    <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Diferenciación</span>
+    <span class="num">8 / 16</span>
+  </div>
+
+  <div class="row grow" style="align-items:center;gap:80px;position:relative;z-index:1;">
+    <div class="col" style="flex:1;gap:28px;">
+      <div class="t-title" style="line-height:1.05;">
+        No está en <span class="neon-magenta">una caja</span>
+      </div>
+      <div class="t-body" style="color:var(--fg-dim);max-width:680px;line-height:1.6;">
+        Mientras otros agentes viven en la nube de terceros, OpenClaw corre donde tú decides. Tus datos. Tu hardware. Tu control.
+      </div>
+      <div class="divline" style="width:300px;"></div>
+      <div class="mono" style="font-size:22px;color:var(--fg-muted);">
+        <span class="neon-accent">openclaw</span> --host localhost --port 3000
+      </div>
+    </div>
+
+    <div class="col" style="flex:0 0 560px;gap:24px;">
+      <div style="padding:36px;background:color-mix(in oklch,var(--cyan) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 35%,transparent);border-radius:8px;">
+        <div class="t-sub neon-cyan" style="font-size:38px;margin-bottom:10px;">Acceso real al sistema</div>
+        <div class="t-body" style="color:var(--fg-dim);">Puede ejecutar en tu infraestructura completa, no en un sandbox</div>
+      </div>
+      <div style="padding:36px;background:color-mix(in oklch,var(--magenta) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 35%,transparent);border-radius:8px;">
+        <div class="t-sub neon-magenta" style="font-size:38px;margin-bottom:10px;">Persistencia de estado</div>
+        <div class="t-body" style="color:var(--fg-dim);">Recuerda entre sesiones, por usuario, por workspace</div>
+      </div>
+      <div style="padding:36px;background:color-mix(in oklch,var(--violet) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--violet) 35%,transparent);border-radius:8px;">
+        <div class="t-sub neon-violet" style="font-size:38px;margin-bottom:10px;">Impacto en el entorno</div>
+        <div class="t-body" style="color:var(--fg-dim);">Sus acciones tienen efectos reales y trazables</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline">No es un asistente… es un operador</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     09 · MODELO CIK
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="CIK" class="slide" data-screen-label="09 Modelo CIK" data-deck-slide="8">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// DISEÑO</span> <span class="dot">·</span> Modelo CIK</span>
+    <span class="num">9 / 16</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom:var(--gap-title);">
+    <span class="caret"></span><span class="arg">agent</span> <span class="flag">--design</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:56px;">
+    Cómo se <span class="neon-cyan">diseña</span> un agente
+  </div>
+
+  <div class="row grow" style="gap:28px;align-items:stretch;">
+    <!-- Capability -->
+    <div style="flex:1;padding:44px 36px;text-align:center;background:color-mix(in oklch,var(--cyan) 6%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--cyan) 14%,transparent);">
+      <div class="mono" style="font-size:60px;font-weight:800;line-height:1;margin-bottom:20px;color:var(--cyan);text-shadow:0 0 30px color-mix(in oklch,var(--cyan) 60%,transparent);">C</div>
+      <div class="t-sub neon-cyan" style="margin-bottom:16px;">Capability</div>
+      <div class="divline" style="margin:0 auto 20px;width:80px;"></div>
+      <div class="t-body" style="color:var(--fg-dim);text-align:left;">Qué puede hacer el agente: herramientas, APIs, acciones disponibles</div>
+    </div>
+
+    <!-- Identity -->
+    <div style="flex:1;padding:44px 36px;text-align:center;background:color-mix(in oklch,var(--magenta) 6%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--magenta) 14%,transparent);">
+      <div class="mono" style="font-size:60px;font-weight:800;line-height:1;margin-bottom:20px;color:var(--magenta);text-shadow:0 0 30px color-mix(in oklch,var(--magenta) 60%,transparent);">I</div>
+      <div class="t-sub neon-magenta" style="margin-bottom:16px;">Identity</div>
+      <div class="divline" style="margin:0 auto 20px;width:80px;background:linear-gradient(90deg,var(--magenta),transparent);"></div>
+      <div class="t-body" style="color:var(--fg-dim);text-align:left;">Quién es: nombre, rol, tono, propósito, valores y límites</div>
+    </div>
+
+    <!-- Knowledge -->
+    <div style="flex:1;padding:44px 36px;text-align:center;background:color-mix(in oklch,var(--violet) 6%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--violet) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--violet) 14%,transparent);">
+      <div class="mono" style="font-size:60px;font-weight:800;line-height:1;margin-bottom:20px;color:var(--violet);text-shadow:0 0 30px color-mix(in oklch,var(--violet) 60%,transparent);">K</div>
+      <div class="t-sub neon-violet" style="margin-bottom:16px;">Knowledge</div>
+      <div class="divline" style="margin:0 auto 20px;width:80px;background:linear-gradient(90deg,var(--violet),transparent);"></div>
+      <div class="t-body" style="color:var(--fg-dim);text-align:left;">Qué sabe: contexto del negocio, reglas, datos de dominio</div>
+    </div>
+  </div>
+
+  <div class="tagline">Esto define cómo piensa, actúa y decide</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     10 · ATAQUES
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Ataques" class="slide" data-screen-label="10 Ataques" data-deck-slide="9">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,color-mix(in oklch,var(--magenta) 14%,transparent),transparent 65%);"></div>
+
+  <div class="topbar" style="position:relative;z-index:1;">
+    <span><span class="section" style="color:var(--magenta);">// SEGURIDAD</span> <span class="dot">·</span> Vectores de ataque</span>
+    <span class="num">10 / 16</span>
+  </div>
+
+  <div class="t-title" style="position:relative;z-index:1;margin-bottom:var(--gap-title);">
+    Esto ya está <span class="neon-magenta">pasando</span>
+  </div>
+
+  <div class="row grow" style="gap:32px;align-items:stretch;position:relative;z-index:1;">
+    <div style="flex:1;padding:40px;border:1px solid color-mix(in oklch,var(--magenta) 40%,transparent);border-radius:8px;background:color-mix(in oklch,var(--magenta) 6%,var(--bg-panel));">
+      <div class="mono" style="font-size:14px;letter-spacing:0.25em;color:var(--magenta);margin-bottom:20px;">ATAQUE 01</div>
+      <div class="t-sub" style="margin-bottom:16px;">Prompt Injection</div>
+      <div class="t-body" style="color:var(--fg-dim);">Contenido malicioso en los inputs modifica el comportamiento del agente y lo desvía de su propósito</div>
+    </div>
+    <div style="flex:1;padding:40px;border:1px solid color-mix(in oklch,var(--magenta) 50%,transparent);border-radius:8px;background:color-mix(in oklch,var(--magenta) 9%,var(--bg-panel));box-shadow:0 0 40px color-mix(in oklch,var(--magenta) 14%,transparent);">
+      <div class="mono" style="font-size:14px;letter-spacing:0.25em;color:var(--magenta);margin-bottom:20px;">ATAQUE 02</div>
+      <div class="t-sub" style="margin-bottom:16px;">Exfiltración de datos</div>
+      <div class="t-body" style="color:var(--fg-dim);">El agente es engañado para enviar información confidencial a destinos no autorizados via herramientas</div>
+    </div>
+    <div style="flex:1;padding:40px;border:1px solid color-mix(in oklch,var(--magenta) 60%,transparent);border-radius:8px;background:color-mix(in oklch,var(--magenta) 12%,var(--bg-panel));box-shadow:0 0 60px color-mix(in oklch,var(--magenta) 18%,transparent);">
+      <div class="mono" style="font-size:14px;letter-spacing:0.25em;color:var(--magenta);margin-bottom:20px;">ATAQUE 03</div>
+      <div class="t-sub" style="margin-bottom:16px;">Manipulación de decisiones</div>
+      <div class="t-body" style="color:var(--fg-dim);">Contexto falso lleva al agente a tomar decisiones incorrectas con impacto real en el sistema</div>
+    </div>
+  </div>
+
+  <div class="tagline" style="border-color:color-mix(in oklch,var(--magenta) 30%,transparent);color:var(--magenta);">
+    Un agente sin control… es una puerta abierta
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     11 · DEFENSA
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Defensa" class="slide" data-screen-label="11 Defensa" data-deck-slide="10">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// SEGURIDAD</span> <span class="dot">·</span> Control</span>
+    <span class="num">11 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:var(--gap-title);">
+    Cómo se <span class="neon-cyan">controla</span> un agente
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px;flex:1;">
+    <div class="panel accent-cyan">
+      <div class="mono neon-cyan" style="font-size:15px;letter-spacing:0.2em;margin-bottom:14px;">◈ CONTROL DE HERRAMIENTAS</div>
+      <div class="t-body" style="color:var(--fg-dim);">Define explícitamente qué puede y no puede usar el agente. Lista blanca, no lista negra.</div>
+    </div>
+    <div class="panel" style="border-color:color-mix(in oklch,var(--cyan) 30%,transparent);">
+      <div class="mono" style="font-size:15px;letter-spacing:0.2em;color:var(--fg-dim);margin-bottom:14px;">◈ VALIDACIÓN DE INPUTS</div>
+      <div class="t-body" style="color:var(--fg-dim);">Sanitiza y valida todo lo que entra antes de que el agente lo procese. No confíes en el input.</div>
+    </div>
+    <div class="panel" style="border-color:color-mix(in oklch,var(--violet) 30%,transparent);">
+      <div class="mono neon-violet" style="font-size:15px;letter-spacing:0.2em;margin-bottom:14px;">◈ AUDITORÍA</div>
+      <div class="t-body" style="color:var(--fg-dim);">Registra cada decisión, cada herramienta usada y cada output. Trazabilidad completa.</div>
+    </div>
+    <div class="panel accent-magenta">
+      <div class="mono neon-magenta" style="font-size:15px;letter-spacing:0.2em;margin-bottom:14px;">◈ CAPAS DE SEGURIDAD</div>
+      <div class="t-body" style="color:var(--fg-dim);">Allowlists, rate limits, confirmation patterns. Diseña para el fallo, no para el éxito.</div>
+    </div>
+  </div>
+
+  <div class="tagline">Si no puedes controlarlo… no deberías desplegarlo</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     12 · MULTI-AGENTES
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="MultiAgentes" class="slide" data-screen-label="12 Multi-Agentes" data-deck-slide="11">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// ESCALA</span> <span class="dot">·</span> Sistemas</span>
+    <span class="num">12 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:var(--gap-title);">
+    Un agente <span class="neon-cyan">ejecuta</span>… un sistema <span class="neon-magenta">piensa</span>
+  </div>
+
+  <div class="row grow" style="gap:40px;align-items:stretch;">
+    <!-- Agente único (dim) -->
+    <div style="flex:1;padding:40px;background:var(--bg-panel);border:1px solid var(--line-strong);border-radius:8px;opacity:0.6;">
+      <div class="mono" style="font-size:16px;letter-spacing:0.2em;color:var(--fg-muted);margin-bottom:24px;">AGENTE ÚNICO</div>
+      <div class="col" style="gap:24px;">
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:6px;">▸ Hace tareas</div>
+          <div class="t-small" style="color:var(--fg-muted);">Ejecuta una tarea a la vez, secuencialmente</div>
+        </div>
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:6px;">▸ Flujo lineal</div>
+          <div class="t-small" style="color:var(--fg-muted);">Sin paralelismo, sin especialización</div>
+        </div>
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:6px;">▸ Limitado</div>
+          <div class="t-small" style="color:var(--fg-muted);">El contexto tiene un límite duro</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0;">
+      <div style="width:1px;flex:1;background:linear-gradient(180deg,transparent,var(--line-strong) 50%,transparent);"></div>
+      <div class="mono" style="font-size:18px;color:var(--fg-muted);letter-spacing:0.15em;margin:12px 0;">→</div>
+      <div style="width:1px;flex:1;background:linear-gradient(180deg,var(--line-strong),transparent);"></div>
+    </div>
+
+    <!-- Sistema multi-agente (neon) -->
+    <div style="flex:1.4;padding:40px;background:color-mix(in oklch,var(--cyan) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:8px;box-shadow:0 0 50px color-mix(in oklch,var(--cyan) 12%,transparent);">
+      <div class="mono neon-cyan" style="font-size:16px;letter-spacing:0.2em;margin-bottom:24px;">SISTEMA MULTI-AGENTE</div>
+      <div class="col" style="gap:24px;">
+        <div>
+          <div class="t-body neon-cyan" style="font-weight:600;margin-bottom:6px;">◈ Roles especializados</div>
+          <div class="t-small" style="color:var(--fg-dim);">Orquestador + agentes expertos por dominio</div>
+        </div>
+        <div>
+          <div class="t-body neon-magenta" style="font-weight:600;margin-bottom:6px;">◈ Colaboración</div>
+          <div class="t-small" style="color:var(--fg-dim);">Agentes se consultan entre sí para tareas complejas</div>
+        </div>
+        <div>
+          <div class="t-body neon-violet" style="font-weight:600;margin-bottom:6px;">◈ Evaluación entre agentes</div>
+          <div class="t-small" style="color:var(--fg-dim);">Un agente puede revisar y criticar el output de otro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline">No escalas agentes… escalas sistemas</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     13 · CASOS REALES
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="CasosReales" class="slide" data-screen-label="13 Casos Reales" data-deck-slide="12">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// VALOR</span> <span class="dot">·</span> Casos reales</span>
+    <span class="num">13 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:var(--gap-title);">
+    Esto ya genera <span class="neon-cyan">valor</span>
+  </div>
+
+  <div class="row grow" style="gap:28px;align-items:stretch;">
+    <div class="col" style="flex:1;gap:0;">
+      <div class="panel accent-cyan" style="flex:1;">
+        <div class="mono neon-cyan" style="font-size:15px;letter-spacing:0.2em;margin-bottom:16px;">CASO 01</div>
+        <div class="t-sub" style="margin-bottom:16px;">Operaciones automatizadas</div>
+        <div class="t-body" style="color:var(--fg-dim);margin-bottom:16px;">Drones que generan reportes automáticos de inspección sin intervención humana</div>
+        <div class="mono" style="font-size:18px;color:var(--fg-muted);">→ Datos → Análisis → Reporte → Envío</div>
+      </div>
+    </div>
+    <div class="col" style="flex:1;gap:0;">
+      <div class="panel accent-magenta" style="flex:1;">
+        <div class="mono neon-magenta" style="font-size:15px;letter-spacing:0.2em;margin-bottom:16px;">CASO 02</div>
+        <div class="t-sub" style="margin-bottom:16px;">Decisiones asistidas</div>
+        <div class="t-body" style="color:var(--fg-dim);margin-bottom:16px;">Automatización empresarial con contexto completo para apoyar decisiones críticas</div>
+        <div class="mono" style="font-size:18px;color:var(--fg-muted);">→ ERP → Agente → Recomendación</div>
+      </div>
+    </div>
+    <div class="col" style="flex:1;gap:0;">
+      <div class="panel accent-violet" style="flex:1;">
+        <div class="mono neon-violet" style="font-size:15px;letter-spacing:0.2em;margin-bottom:16px;">CASO 03</div>
+        <div class="t-sub" style="margin-bottom:16px;">Sistemas autónomos</div>
+        <div class="t-body" style="color:var(--fg-dim);margin-bottom:16px;">Equipo virtual completo — Atena, Hermes, Apolo — coordinado por un orquestador</div>
+        <div class="mono" style="font-size:18px;color:var(--fg-muted);">→ Objetivo → Asignación → Ejecución</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline">La diferencia ya no es quién usa IA… es quién delega mejor</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     14 · DEMO
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Demo" class="slide" data-screen-label="14 Demo" data-deck-slide="13">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:
+    radial-gradient(ellipse at 30% 50%,color-mix(in oklch,var(--cyan) 12%,transparent),transparent 55%),
+    radial-gradient(ellipse at 75% 40%,color-mix(in oklch,var(--magenta) 10%,transparent),transparent 55%);"></div>
+
+  <div class="topbar" style="position:relative;z-index:1;">
+    <span><span class="section">// DEMO</span> <span class="dot">·</span> En vivo</span>
+    <span class="num">14 / 16</span>
+  </div>
+
+  <div style="position:relative;z-index:1;text-align:center;margin-bottom:52px;">
+    <div class="t-title">
+      De <span class="neon-cyan">objetivo</span> a <span class="neon-magenta">acción</span>
+    </div>
+  </div>
+
+  <div class="row grow" style="align-items:center;justify-content:center;gap:0;position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;">
+    <div style="flex:1;text-align:center;padding:48px 32px;background:color-mix(in oklch,var(--cyan) 7%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--cyan) 15%,transparent);">
+      <div class="mono neon-cyan" style="font-size:52px;font-weight:800;line-height:1;margin-bottom:16px;">01</div>
+      <div class="t-sub neon-cyan" style="margin-bottom:16px;">Objetivo</div>
+      <div class="t-body" style="color:var(--fg-dim);">"Quiero el estado de todas mis facturas pendientes"</div>
+    </div>
+
+    <div style="padding:0 20px;text-align:center;">
+      <div class="mono neon-cyan" style="font-size:48px;">→</div>
+    </div>
+
+    <div style="flex:1;text-align:center;padding:48px 32px;background:color-mix(in oklch,var(--magenta) 7%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--magenta) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--magenta) 15%,transparent);">
+      <div class="mono neon-magenta" style="font-size:52px;font-weight:800;line-height:1;margin-bottom:16px;">02</div>
+      <div class="t-sub neon-magenta" style="margin-bottom:16px;">Decisión</div>
+      <div class="t-body" style="color:var(--fg-dim);">El agente clasifica, enruta al sub-agente de Operaciones y consulta el ERP</div>
+    </div>
+
+    <div style="padding:0 20px;text-align:center;">
+      <div class="mono neon-magenta" style="font-size:48px;">→</div>
+    </div>
+
+    <div style="flex:1;text-align:center;padding:48px 32px;background:color-mix(in oklch,var(--violet) 7%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--violet) 40%,transparent);border-radius:8px;box-shadow:0 0 40px color-mix(in oklch,var(--violet) 15%,transparent);">
+      <div class="mono neon-violet" style="font-size:52px;font-weight:800;line-height:1;margin-bottom:16px;">03</div>
+      <div class="t-sub neon-violet" style="margin-bottom:16px;">Ejecución</div>
+      <div class="t-body" style="color:var(--fg-dim);">Responde por WhatsApp con el reporte completo. Todo en tu infraestructura.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     15 · CAMBIO MENTAL
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="CambioMental" class="slide" data-screen-label="15 Cambio Mental" data-deck-slide="14">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// MENTALIDAD</span> <span class="dot">·</span> El cambio</span>
+    <span class="num">15 / 16</span>
+  </div>
+
+  <div class="t-title" style="margin-bottom:var(--gap-title);">
+    De <span class="neon-magenta">usar</span> IA… a <span class="neon-cyan">delegar</span> trabajo
+  </div>
+
+  <div class="row grow" style="gap:0;align-items:stretch;">
+    <!-- Usar IA (dim) -->
+    <div style="flex:1;padding:40px;background:var(--bg-panel);border:1px solid var(--line-strong);border-radius:8px 0 0 8px;opacity:0.55;">
+      <div class="mono" style="font-size:16px;letter-spacing:0.2em;color:var(--fg-muted);margin-bottom:24px;">USAR IA</div>
+      <div class="col" style="gap:28px;">
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:8px;">Pedir</div>
+          <div class="t-small" style="color:var(--fg-muted);">Formulo el prompt, espero la respuesta</div>
+        </div>
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:8px;">Esperar</div>
+          <div class="t-small" style="color:var(--fg-muted);">La IA responde. Yo evalúo.</div>
+        </div>
+        <div>
+          <div class="t-body" style="color:var(--fg-dim);font-weight:600;margin-bottom:8px;">Ejecutar manual</div>
+          <div class="t-small" style="color:var(--fg-muted);">Yo hago la acción que la IA sugirió</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div style="display:flex;align-items:center;justify-content:center;width:80px;flex-shrink:0;background:linear-gradient(90deg,var(--bg-panel),color-mix(in oklch,var(--cyan) 5%,var(--bg-panel)));">
+      <div class="mono neon-cyan" style="font-size:40px;">→</div>
+    </div>
+
+    <!-- Delegar a IA (neon) -->
+    <div style="flex:1;padding:40px;background:color-mix(in oklch,var(--cyan) 5%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:0 8px 8px 0;box-shadow:0 0 60px color-mix(in oklch,var(--cyan) 12%,transparent);">
+      <div class="mono neon-cyan" style="font-size:16px;letter-spacing:0.2em;margin-bottom:24px;">DELEGAR A IA</div>
+      <div class="col" style="gap:28px;">
+        <div>
+          <div class="t-body neon-cyan" style="font-weight:600;margin-bottom:8px;">Definir objetivos</div>
+          <div class="t-small" style="color:var(--fg-dim);">Describo qué quiero lograr, no cómo</div>
+        </div>
+        <div>
+          <div class="t-body neon-magenta" style="font-weight:600;margin-bottom:8px;">Supervisar</div>
+          <div class="t-small" style="color:var(--fg-dim);">Reviso resultados, corrijo el rumbo cuando es necesario</div>
+        </div>
+        <div>
+          <div class="t-body neon-violet" style="font-weight:600;margin-bottom:8px;">Escalar</div>
+          <div class="t-small" style="color:var(--fg-dim);">El sistema hace más sin que yo haga más</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tagline">Ahí empieza la verdadera transformación</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     16 · CIERRE
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Cierre" class="slide" style="padding:0;justify-content:center;align-items:center;" data-screen-label="16 Cierre" data-deck-slide="15">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:
+    radial-gradient(ellipse at 35% 45%, color-mix(in oklch,var(--cyan) 16%,transparent), transparent 55%),
+    radial-gradient(ellipse at 72% 58%, color-mix(in oklch,var(--magenta) 14%,transparent), transparent 55%),
+    radial-gradient(ellipse at 55% 80%, color-mix(in oklch,var(--violet) 8%,transparent), transparent 50%);"></div>
+
+  <!-- Same hero particles as portada -->
+  <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;">
+    <div style="position:absolute;width:700px;height:700px;border-radius:50%;border:1px solid color-mix(in oklch,var(--cyan) 18%,transparent);top:50%;left:50%;animation:hpulse-ring 6s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:920px;height:920px;border-radius:50%;border:1px dashed color-mix(in oklch,var(--magenta) 12%,transparent);top:50%;left:50%;animation:hpulse-ring 9s ease-in-out infinite;animation-delay:-3s;"></div>
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-cw 20s linear infinite;">
+      <div style="position:absolute;width:6px;height:6px;top:-3px;left:350px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 30px color-mix(in oklch,var(--cyan) 55%,transparent);"></div>
+    </div>
+    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-ccw 14s linear infinite;animation-delay:-6s;">
+      <div style="position:absolute;width:5px;height:5px;top:-2.5px;left:310px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 26px color-mix(in oklch,var(--magenta) 55%,transparent);"></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,color-mix(in oklch,var(--cyan) 55%,transparent) 35%,color-mix(in oklch,var(--magenta) 55%,transparent) 65%,transparent);animation:hscan 12s linear infinite;"></div>
+    <div style="position:absolute;top:10%;left:6%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 9s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:75%;right:6%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 8s ease-in-out infinite;animation-delay:-2s;"></div>
+    <div style="position:absolute;top:20%;right:10%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-4s;"></div>
+    <div style="position:absolute;top:80%;left:15%;width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan),0 0 20px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-1.5s;"></div>
+  </div>
+
+  <div style="position:relative;z-index:2;text-align:center;padding:0 120px;">
+    <div class="mono" style="font-size:18px;color:var(--fg-muted);letter-spacing:0.35em;margin-bottom:36px;text-transform:uppercase;">El futuro pertenece a quienes</div>
+    <div class="t-title neon-cyan" style="font-size:88px;line-height:1.0;letter-spacing:-0.02em;margin-bottom:8px;">diseñan agentes</div>
+    <div class="divline" style="width:560px;margin:32px auto 32px;"></div>
+    <div class="t-sub" style="color:var(--fg-dim);font-weight:400;margin-bottom:40px;">
+      No a quienes solo <span class="neon-magenta">usan</span> IA
+    </div>
+    <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+      <span class="chip active">docs.openclaw.ai</span>
+      <span class="chip active">github.com/openclaw</span>
+      <span class="chip active">Diego Escobar</span>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:60px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:end;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--fg-muted);letter-spacing:0.1em;">
+    <span>FLISoL · Medellín 2026</span>
+    <span>Diego Escobar · <span class="neon-accent">@diegoescobar</span></span>
+    <span>openclaw.ai</span>
+  </div>
+</section>
+
+
+</deck-stage>
+
+<style>
+#tweaks-panel { position:fixed; bottom:20px; right:20px; background:rgba(7,11,20,0.95); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:16px 20px; color:#e2e8f0; font-family:'JetBrains Mono',monospace; font-size:13px; z-index:9999; min-width:200px; opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity 200ms,transform 200ms; }
+#tweaks-panel.visible { opacity:1; pointer-events:auto; transform:translateY(0); }
+#tweaks-panel h4 { margin:0 0 12px 0; color:var(--accent,#00f0ff); font-size:13px; font-weight:600; letter-spacing:0.15em; }
+#tweaks-panel .group { margin-bottom:12px; }
+#tweaks-panel .group-label { color:#475569; font-size:11px; letter-spacing:0.15em; margin-bottom:8px; text-transform:uppercase; }
+#tweaks-panel .opts { display:flex; gap:8px; flex-wrap:wrap; }
+#tweaks-panel .opts button { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:5px 10px; color:#94a3b8; font-family:inherit; font-size:12px; cursor:pointer; transition:all 140ms; letter-spacing:0.05em; }
+#tweaks-panel .opts button:hover { background:rgba(255,255,255,0.15); color:#fff; }
+#tweaks-panel .opts button.active { border-color:var(--accent,#00f0ff); color:var(--accent,#00f0ff); background:rgba(0,240,255,0.08); }
+#tweaks-panel .swatch { width:24px; height:24px; border-radius:50%; padding:0; border:2px solid transparent; }
+#tweaks-panel .swatch.active { border-color:#fff; box-shadow:0 0 8px currentColor; }
+</style>
+
+<div id="tweaks-panel">
+  <h4>// TWEAKS</h4>
+  <div class="group">
+    <div class="group-label">Color acento</div>
+    <div class="opts">
+      <button class="swatch active" data-accent="cyan"    style="background:#00f0ff"></button>
+      <button class="swatch"        data-accent="magenta" style="background:#ff2fb5"></button>
+      <button class="swatch"        data-accent="violet"  style="background:#a855f7"></button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label">Modo visual</div>
+    <div class="opts">
+      <button data-mode="neon"   class="active">FULL NEON</button>
+      <button data-mode="sobrio">SOBRIO</button>
+    </div>
+  </div>
+</div>
+
+<script>
+class DeckStage extends HTMLElement {
+  connectedCallback() {
+    this._slides = [];
+    this._cur = 0;
+    this._wakeTimer = null;
+    this._shadow = this.shadowRoot;
+    this._slides = Array.from(this.children).filter(el => el.tagName === 'SECTION');
+    this._total = this._slides.length;
+    this._overlay  = this._shadow.querySelector('.overlay');
+    this._countEl  = this._shadow.querySelector('.count .current');
+    this._totalEl  = this._shadow.querySelector('.count .total');
+    this._canvas   = this._shadow.querySelector('.canvas');
+    if (this._totalEl) this._totalEl.textContent = this._total;
+    const activeIdx = this._slides.findIndex(s => s.hasAttribute('data-deck-active'));
+    this._cur = activeIdx >= 0 ? activeIdx : 0;
+    this._show(this._cur, false);
+    this._resize();
+    this._onKey = (e) => {
+      if (['ArrowRight','ArrowDown','Space'].includes(e.code) || e.key === ' ') { e.preventDefault(); this._next(); }
+      else if (['ArrowLeft','ArrowUp'].includes(e.code)) { e.preventDefault(); this._prev(); }
+      else if (e.key === 'r' || e.key === 'R') { this._goto(0); }
+      else if (e.key === 't' || e.key === 'T') { document.getElementById('tweaks-panel')?.classList.toggle('visible'); }
+      this._wake();
+    };
+    document.addEventListener('keydown', this._onKey);
+    const prevBtn  = this._shadow.querySelector('.btn.prev');
+    const nextBtn  = this._shadow.querySelector('.btn.next');
+    const resetBtn = this._shadow.querySelector('.btn.reset');
+    if (prevBtn)  prevBtn.addEventListener('click',  () => { this._prev(); this._wake(); });
+    if (nextBtn)  nextBtn.addEventListener('click',  () => { this._next(); this._wake(); });
+    if (resetBtn) resetBtn.addEventListener('click', () => { this._goto(0); this._wake(); });
+    const back = this._shadow.querySelector('.tapzone--back');
+    const fwd  = this._shadow.querySelector('.tapzone--fwd');
+    if (back) back.addEventListener('click', () => { this._prev(); this._wake(); });
+    if (fwd)  fwd.addEventListener('click',  () => { this._next(); this._wake(); });
+    document.addEventListener('mousemove', () => this._wake());
+    this._onResize = () => this._resize();
+    window.addEventListener('resize', this._onResize);
+    this._wake();
+  }
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this._onKey);
+    window.removeEventListener('resize', this._onResize);
+  }
+  _show(idx) {
+    this._slides.forEach((s, i) => {
+      if (i === idx) s.setAttribute('data-deck-active', '');
+      else s.removeAttribute('data-deck-active');
+    });
+    this._cur = idx;
+    if (this._countEl) this._countEl.textContent = idx + 1;
+  }
+  _next() { if (this._cur < this._total - 1) this._show(this._cur + 1); }
+  _prev() { if (this._cur > 0) this._show(this._cur - 1); }
+  _goto(idx) { this._show(Math.max(0, Math.min(idx, this._total - 1))); }
+  _wake() {
+    if (this._overlay) this._overlay.setAttribute('data-visible', '');
+    clearTimeout(this._wakeTimer);
+    this._wakeTimer = setTimeout(() => { if (this._overlay) this._overlay.removeAttribute('data-visible'); }, 3000);
+  }
+  _resize() {
+    if (!this._canvas) return;
+    const W = this.getAttribute('width') || 1920;
+    const H = this.getAttribute('height') || 1080;
+    const scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    this._canvas.style.transform = `scale(${scale})`;
+    this._canvas.style.width  = W + 'px';
+    this._canvas.style.height = H + 'px';
+  }
+}
+customElements.define('deck-stage', DeckStage);
+
+const panel = document.getElementById('tweaks-panel');
+const html  = document.documentElement;
+panel?.querySelectorAll('[data-accent]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const map = { cyan:'#00f0ff', magenta:'#ff2fb5', violet:'#a855f7' };
+    const color = map[btn.dataset.accent];
+    if (color) html.style.setProperty('--accent', color);
+    panel.querySelectorAll('[data-accent]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+panel?.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sobrio = btn.dataset.mode === 'sobrio';
+    html.style.setProperty('--glow', sobrio ? '0' : '0.55');
+    html.style.setProperty('--scanlines', sobrio ? '0' : '0.045');
+    panel.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
