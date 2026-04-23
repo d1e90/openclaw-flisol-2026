@@ -92,15 +92,21 @@ section[data-deck-slide="16"],
 section[data-deck-slide="17"],
 section[data-deck-slide="18"],
 section[data-deck-slide="19"],
-section[data-deck-slide="20"] { background-color: #040e16; }
-/* DEMO — violet tint */
+section[data-deck-slide="20"],
+section[data-deck-slide="21"],
 section[data-deck-slide="22"],
-section[data-deck-slide="23"],
-section[data-deck-slide="24"],
-section[data-deck-slide="25"] { background-color: #08070f; }
-/* COMUNIDAD */
+section[data-deck-slide="23"] { background-color: #040e16; }
+/* DEMO — violet tint */
+section[data-deck-slide="25"],
+section[data-deck-slide="26"],
 section[data-deck-slide="27"],
-section[data-deck-slide="28"] { background-color: #050d16; }
+section[data-deck-slide="28"] { background-color: #08070f; }
+/* DISEÑA TU AGENTE — cyan tint */
+section[data-deck-slide="30"],
+section[data-deck-slide="31"] { background-color: #040e16; }
+/* COMUNIDAD */
+section[data-deck-slide="33"],
+section[data-deck-slide="34"] { background-color: #050d16; }
 
 /* ── HUD corners ───────────────────────────────────────────── */
 .hud {
@@ -322,11 +328,17 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
 "OpenClaw es, en una frase, un gateway self-hosted que conecta tus apps de mensajería favoritas con agentes de IA. Funciona como un puente: tú corres un proceso —el Gateway— en tu máquina o en un servidor, y ese proceso traduce entre WhatsApp, Telegram, Discord, iMessage, Signal, Slack, Teams, Matrix, lo que tengas, y un agente de IA que tú controlas. Es MIT, es open source, y está activamente desarrollado.",
 
+"El arnés es el concepto clave de esta charla. Un modelo de lenguaje bruto —Claude, GPT, Gemini— es puro procesamiento de texto: no tiene memoria, no puede llamar a una API, no sabe quién eres ni qué empresa tienes. OpenClaw actúa como el arnés que envuelve ese modelo y lo conecta con el mundo real: le da memoria a largo plazo, le pone herramientas concretas en las manos, y le da canales para comunicarse. Sin el arnés, el modelo es brillante pero inútil en producción. Con el arnés, es un agente autónomo que trabaja para tu empresa 24 horas.",
+
 "La arquitectura es elegante en su simplicidad. Los canales —todos estos mensajeros— le hablan al Gateway. El Gateway mantiene las sesiones, enruta los mensajes al agente correcto según reglas que tú defines, y responde por el mismo canal. Puedes tener varios agentes especializados, varios workspaces, y todos los canales simultáneamente sobre un solo proceso. Esto es lo que lo hace distinto.",
 
 "La lista de canales soportados de fábrica es larga: Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, WebChat, y a través de plugins llega hasta Nostr, Twitch y más. Lo importante no es la lista en sí, es que un solo Gateway sirve todos al tiempo. No necesitas un bot de Telegram, otro de Slack y otro de WhatsApp. Es uno.",
 
 "Esta es la capacidad que más me enamoró: el enrutamiento multi-agente. OpenClaw no asume que tienes un solo asistente. Puedes definir varios agentes —uno para ventas, uno para soporte, uno para operaciones— con sesiones aisladas por workspace o por remitente. Cada agente tiene su propia memoria, su propio contexto, sus propias herramientas. Esto es justamente lo que vamos a ver en la demo.",
+
+"Les muestro qué archivos componen un agente OpenClaw por dentro. Son seis conceptos. identity.md define quién es el agente: su nombre, su rol, su tono. user.md define quién eres tú: el contexto, la bio, cómo te comunicas. soul.md es lo más profundo: el propósito del agente, sus valores, sus límites, la razón por la que existe. agent.md es el manual operativo: fases de trabajo, prioridades, qué hace cada día. tools.md define qué herramientas puede usar y bajo qué reglas. Y herbit.md junto con los cron jobs son los hábitos: cuándo el agente actúa por iniciativa propia, sin que nadie se lo pida.",
+
+"Hagamos la comparativa directa con lo que ya conocen. ChatGPT y Claude son brillantes, pero funcionan en la plataforma del proveedor: tus datos viven allá, el modelo lo deciden ellos, la ejecución es solo bajo demanda. OpenClaw te da la vuelta completa: tú eliges el modelo, corre en tu infraestructura, tiene acceso real al sistema, y el código es auditable. No es que las apps comerciales sean malas —yo mismo las uso a diario. La diferencia es quién tiene el control, quién es dueño de los datos, y qué tan lejos puedes llevar la personalización.",
 
 "Además de agentes, OpenClaw soporta herramientas y plugins: conexión con modelos de distintos proveedores, manejo de imágenes, audio y documentos, integración con nodos móviles iOS y Android para Canvas, cámara y voz. Es extensible por diseño. Si el canal o la herramienta que necesitas no existe aún, está hecho para que tú la construyas.",
 
@@ -343,6 +355,12 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 "El flujo es así. Un usuario escribe por WhatsApp: 'Necesito el estado de mi factura'. El Gateway recibe el mensaje, el orquestador clasifica la intención, enruta al agente de Operaciones, que consulta el ERP, arma la respuesta, y el Gateway la devuelve por el mismo WhatsApp. Todo en segundos, todo con trazabilidad, todo en mi infraestructura.",
 
 "Y el resultado es que desde un solo número de WhatsApp, sin que el usuario sepa que está hablando con cinco agentes distintos, resuelve su caso. Si es una pregunta compleja, el orquestador puede pedirle colaboración a varios agentes a la vez. Y todo esto vive en mi servidor. Esta es la demo que ustedes pueden construir esta semana.",
+
+"Muy bien. Ya vimos qué es OpenClaw, el arnés, la anatomía de un agente y cómo se diferencia de las apps comerciales. Ahora la pregunta más práctica que me hacen siempre: ¿cómo diseño mi propio agente desde cero? Les muestro el proceso en cuatro pasos y luego tres casos reales que pueden implementar esta semana.",
+
+"El proceso para diseñar un agente no empieza con código. Empieza pensando en roles humanos. Primero defines qué puesto de tu equipo quieres replicar o potenciar. Segundo mapeas el proceso humano: qué recibe, qué hace, qué produce. Tercero lo traduces a los archivos de OpenClaw —identity, soul, agent, tools, herbit. Y cuarto, algo que muy poca gente hace: usas otras IAs para ayudarte a escribir los borradores. Claude, Gemini, Perplexity para proponer el soul y el agent.md. Luego los revisas tú. No tienes que empezar desde hoja en blanco.",
+
+"Tres casos reales. El primero es un equipo virtual completo en un VPS: varios agentes especializados —Atena para desarrollo, Hermes para automatización, Apolo para marketing— con un coordinador que los orquesta. Así funciona mi empresa hoy. El segundo es un asistente personal auto-hospedado con acceso a tu infraestructura completa, usando distintos modelos de Claude según la complejidad de la tarea. El tercero es seguimiento de proyectos: el agente que nunca duerme, que revisa el estado del equipo cada mañana y te manda el resumen por Telegram antes de que abras el computador. Los tres los pueden replicar con lo que les enseñé hoy.",
 
 "Llegamos al cierre. Y quiero hablarles de algo que va más allá de OpenClaw como producto: OpenClaw como comunidad.",
 
@@ -574,7 +592,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// INTRO</span> <span class="dot">·</span> Presentador</span>
-    <span class="num">02 / 30</span>
+    <span class="num">2 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -623,7 +641,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// INTRO</span> <span class="dot">·</span> Roadmap</span>
-    <span class="num">03 / 30</span>
+    <span class="num">3 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -644,7 +662,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
       <div class="mono neon-magenta" style="font-size: 48px; font-weight: 700; width: 140px;">02</div>
       <div class="grow">
         <div class="t-sub">La solución · OpenClaw</div>
-        <div class="t-small">Arquitectura, canales, agentes y seguridad</div>
+        <div class="t-small">El arnés, arquitectura, canales, agentes y seguridad</div>
       </div>
       <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~10 MIN</div>
     </div>
@@ -656,13 +674,21 @@ section[data-deck-slide="28"] { background-color: #050d16; }
       </div>
       <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~7 MIN</div>
     </div>
-    <div class="row" style="align-items: center; gap: 48px; padding: 28px 0;">
+    <div class="row" style="align-items: center; gap: 48px; padding: 28px 0; border-bottom: 1px solid var(--line);">
       <div class="mono neon-accent" style="font-size: 48px; font-weight: 700; width: 140px;">04</div>
+      <div class="grow">
+        <div class="t-sub">Diseña tu agente</div>
+        <div class="t-small">Del rol humano al agente autónomo · casos reales</div>
+      </div>
+      <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~5 MIN</div>
+    </div>
+    <div class="row" style="align-items: center; gap: 48px; padding: 28px 0;">
+      <div class="mono" style="font-size: 48px; font-weight: 700; width: 140px; color: var(--fg-dim);">05</div>
       <div class="grow">
         <div class="t-sub">Cómo contribuir · Q&amp;A</div>
         <div class="t-small">La comunidad te está esperando</div>
       </div>
-      <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~6 MIN</div>
+      <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.1em;">~5 MIN</div>
     </div>
   </div>
 </section>
@@ -676,7 +702,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// HISTORIA</span> <span class="dot">·</span> Origen</span>
-    <span class="num">04 / 30</span>
+    <span class="num">4 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -724,7 +750,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// HISTORIA</span> <span class="dot">·</span> Naming</span>
-    <span class="num">05 / 30</span>
+    <span class="num">5 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -771,7 +797,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// HISTORIA</span> <span class="dot">·</span> Viral growth &amp; fundación</span>
-    <span class="num">06 / 30</span>
+    <span class="num">6 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -882,7 +908,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> Overhead operativo</span>
-    <span class="num">08 / 30</span>
+    <span class="num">8 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -923,7 +949,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> El costo real</span>
-    <span class="num">09 / 30</span>
+    <span class="num">9 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: 60px;">
@@ -963,7 +989,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> Vendor lock-in</span>
-    <span class="num">10 / 30</span>
+    <span class="num">10 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1005,7 +1031,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> Privacidad &amp; compliance</span>
-    <span class="num">11 / 30</span>
+    <span class="num">11 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1050,7 +1076,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> El hueco del mercado</span>
-    <span class="num">12 / 30</span>
+    <span class="num">12 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1087,7 +1113,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// PROBLEMA</span> <span class="dot">·</span> Lo que debería existir</span>
-    <span class="num">13 / 30</span>
+    <span class="num">13 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: 60px;">
@@ -1153,7 +1179,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Definición</span>
-    <span class="num">15 / 30</span>
+    <span class="num">15 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1184,16 +1210,75 @@ section[data-deck-slide="28"] { background-color: #050d16; }
   </div>
 </section>
 
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · EL ARNÉS
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="El Arnes" class="slide" data-screen-label="16 El Arnes" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="15">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> El Arnés</span>
+    <span class="num">16 / 36</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom: 36px;">
+    <span class="caret"></span><span class="arg">cat</span> <span class="flag">arnes.md</span>
+  </div>
+
+  <div class="t-sub" style="max-width: 1600px; margin-bottom: 40px;">
+    Traductor entre el <span class="neon-magenta">rendimiento bruto del modelo</span> y las <span class="neon-cyan">aplicaciones del mundo real</span> en un entorno empresarial.
+  </div>
+
+  <div class="row grow" style="gap: 28px; align-items: stretch;">
+    <div class="col" style="flex: 1; gap: 12px; justify-content: center;">
+      <div class="mono" style="color: var(--fg-muted); font-size: 15px; letter-spacing: 0.2em; margin-bottom: 8px;">MODELO BRUTO</div>
+      <div class="arch-node agent" style="font-size: 22px; padding: 14px 20px;">Claude</div>
+      <div class="arch-node agent" style="font-size: 22px; padding: 14px 20px;">GPT</div>
+      <div class="arch-node agent" style="font-size: 22px; padding: 14px 20px;">Gemini</div>
+      <div class="arch-node agent" style="font-size: 22px; padding: 14px 20px; opacity:0.7;">Local · Llama</div>
+    </div>
+
+    <div class="mono" style="font-size: 44px; color: var(--accent); text-shadow: 0 0 20px currentColor; align-self: center;">▶▶</div>
+
+    <div style="flex: 1.4; display:flex; align-items:center; justify-content:center;">
+      <div class="panel accent-cyan" style="width:100%; padding: 32px 24px; text-align:center;">
+        <div class="mono" style="font-size: 15px; color: var(--fg-muted); letter-spacing: 0.3em; margin-bottom: 12px;">EL ARNÉS</div>
+        <div class="t-title" style="font-size: 56px; line-height:1.0;">
+          <span class="neon-cyan">Open</span><span class="neon-magenta">Claw</span>
+        </div>
+        <div style="border-top: 1px solid var(--line); margin-top: 18px; padding-top: 18px; display:grid; grid-template-columns:1fr 1fr; gap:10px; text-align:left;">
+          <div class="mono" style="font-size: 18px; color: var(--fg-dim);">◇ Memoria</div>
+          <div class="mono" style="font-size: 18px; color: var(--fg-dim);">◇ Herramientas</div>
+          <div class="mono" style="font-size: 18px; color: var(--fg-dim);">◇ Automatización</div>
+          <div class="mono" style="font-size: 18px; color: var(--fg-dim);">◇ Canales</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mono" style="font-size: 44px; color: var(--accent-2); text-shadow: 0 0 20px currentColor; align-self: center;">▶▶</div>
+
+    <div class="col" style="flex: 1; gap: 12px; justify-content: center;">
+      <div class="mono" style="color: var(--fg-muted); font-size: 15px; letter-spacing: 0.2em; margin-bottom: 8px;">MUNDO REAL</div>
+      <div class="arch-node chan" style="font-size: 22px; padding: 14px 20px;">WhatsApp · Telegram</div>
+      <div class="arch-node chan" style="font-size: 22px; padding: 14px 20px;">APIs internas</div>
+      <div class="arch-node chan" style="font-size: 22px; padding: 14px 20px;">CRM · ERP</div>
+      <div class="arch-node chan" style="font-size: 22px; padding: 14px 20px; opacity:0.7;">Terminal · Scripts</div>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════════════════════════════════════════════════════
      13 · ARQUITECTURA
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Arquitectura" class="slide" data-screen-label="16 Arquitectura" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="15">
+<section data-label="Arquitectura" class="slide" data-screen-label="17 Arquitectura" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="16">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Arquitectura</span>
-    <span class="num">16 / 30</span>
+    <span class="num">17 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: 40px;">
@@ -1252,13 +1337,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      14 · CANALES
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Canales" class="slide" data-screen-label="17 Canales" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="16">
+<section data-label="Canales" class="slide" data-screen-label="18 Canales" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="17">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Multi-canal</span>
-    <span class="num">17 / 30</span>
+    <span class="num">18 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1321,13 +1406,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      15 · MULTI-AGENTE
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Multi-agente" class="slide" data-screen-label="18 Multi-agente" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="17">
+<section data-label="Multi-agente" class="slide" data-screen-label="19 Multi-agente" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="18">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Multi-agent routing</span>
-    <span class="num">18 / 30</span>
+    <span class="num">19 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1385,16 +1470,127 @@ section[data-deck-slide="28"] { background-color: #050d16; }
   </div>
 </section>
 
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · ANATOMÍA DEL AGENTE
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Anatomia agente" class="slide" data-screen-label="20 Anatomia agente" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="19">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Anatomía del agente</span>
+    <span class="num">20 / 36</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom: 36px;">
+    <span class="caret"></span><span class="arg">ls</span> <span class="flag">~/agent/</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; flex: 1;">
+    <div class="panel accent-cyan" style="display:flex; flex-direction:column; gap: 10px;">
+      <div class="mono" style="color: var(--cyan); font-size: 15px; letter-spacing: 0.15em;">identity.md</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Identidad</div>
+      <div class="t-small" style="color: var(--fg-dim);">Nombre, rol, tono, estilo. Quién es el agente.</div>
+    </div>
+    <div class="panel accent-cyan" style="display:flex; flex-direction:column; gap: 10px;">
+      <div class="mono" style="color: var(--cyan); font-size: 15px; letter-spacing: 0.15em;">user.md</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Usuario</div>
+      <div class="t-small" style="color: var(--fg-dim);">Quién eres tú. Contexto, bio, forma de comunicarte.</div>
+    </div>
+    <div class="panel accent-magenta" style="display:flex; flex-direction:column; gap: 10px;">
+      <div class="mono" style="color: var(--magenta); font-size: 15px; letter-spacing: 0.15em;">soul.md</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Alma</div>
+      <div class="t-small" style="color: var(--fg-dim);">Propósito profundo, valores, límites y filosofía del agente.</div>
+    </div>
+    <div class="panel accent-magenta" style="display:flex; flex-direction:column; gap: 10px;">
+      <div class="mono" style="color: var(--magenta); font-size: 15px; letter-spacing: 0.15em;">agent.md</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Operación</div>
+      <div class="t-small" style="color: var(--fg-dim);">Manual operativo: fases de trabajo, prioridades, reglas diarias.</div>
+    </div>
+    <div class="panel accent-violet" style="display:flex; flex-direction:column; gap: 10px; grid-column: span 2;">
+      <div class="mono" style="color: var(--violet); font-size: 15px; letter-spacing: 0.15em;">tools.md</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Herramientas</div>
+      <div class="t-small" style="color: var(--fg-dim);">APIs externas, MCPs, scripts, terminal. Cómo y cuándo usar cada herramienta.</div>
+    </div>
+    <div class="panel accent-violet" style="display:flex; flex-direction:column; gap: 10px; grid-column: span 2;">
+      <div class="mono" style="color: var(--violet); font-size: 15px; letter-spacing: 0.15em;">herbit.md · cron</div>
+      <div class="t-sub" style="font-weight: 600; font-size: 28px;">Hábitos</div>
+      <div class="t-small" style="color: var(--fg-dim);">El agente "se despierta", evalúa condiciones y actúa por iniciativa propia.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · CHATGPT VS OPENCLAW
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="ChatGPT vs OpenClaw" class="slide" data-screen-label="21 ChatGPT vs OpenClaw" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="20">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Comparativa</span>
+    <span class="num">21 / 36</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom: 36px;">
+    <span class="caret"></span><span class="arg">diff</span> <span class="flag">chatgpt openclaw</span>
+  </div>
+
+  <table class="cmp" style="flex: 1;">
+    <thead>
+      <tr>
+        <th style="width: 28%; text-align:left;">Aspecto</th>
+        <th>ChatGPT / Claude app</th>
+        <th>OpenClaw</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Modelo</td>
+        <td class="n">Cerrado en la plataforma</td>
+        <td class="y">Tú eliges: Anthropic, OpenAI, Gemini, local</td>
+      </tr>
+      <tr>
+        <td>Ejecución</td>
+        <td class="n">Solo cuando chateas</td>
+        <td class="y">24/7 · tareas en segundo plano</td>
+      </tr>
+      <tr>
+        <td>Acceso al sistema</td>
+        <td class="n">Sandbox limitado</td>
+        <td class="y">Archivos, terminal, APIs internas</td>
+      </tr>
+      <tr class="hl">
+        <td>Propiedad de datos</td>
+        <td class="n">Servidores del proveedor</td>
+        <td class="y">Tu máquina · tu VPS · tus reglas</td>
+      </tr>
+      <tr>
+        <td>Personalización</td>
+        <td class="m">GPTs / instructions limitadas</td>
+        <td class="y">Identidad, alma, procesos, hábitos</td>
+      </tr>
+      <tr>
+        <td>Licencia</td>
+        <td class="n">Cerrado · SaaS</td>
+        <td class="y">MIT · código abierto</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
 <!-- ════════════════════════════════════════════════════════════
      16 · TOOLS & PLUGINS
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Tools" class="slide" data-screen-label="19 Tools" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="18">
+<section data-label="Tools" class="slide" data-screen-label="22 Tools" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="21">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Tools &amp; plugins</span>
-    <span class="num">19 / 30</span>
+    <span class="num">22 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1442,13 +1638,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      17 · INSTALL
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Install" class="slide" data-screen-label="20 Install" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="19">
+<section data-label="Install" class="slide" data-screen-label="23 Install" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="22">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Quickstart</span>
-    <span class="num">20 / 30</span>
+    <span class="num">23 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1479,13 +1675,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      18 · SECURITY
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Security" class="slide" data-screen-label="21 Security" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="20">
+<section data-label="Security" class="slide" data-screen-label="24 Security" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="23">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// OPENCLAW</span> <span class="dot">·</span> Security &amp; control</span>
-    <span class="num">21 / 30</span>
+    <span class="num">24 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1528,7 +1724,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      19 · SECTION HEADER — DEMO
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Seccion Demo" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="22 Seccion Demo" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="21">
+<section data-label="Seccion Demo" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="25 Seccion Demo" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="24">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
@@ -1561,13 +1757,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      20 · DEMO · CASO DE USO
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Demo caso Telegram" class="slide" data-screen-label="23 Demo caso Telegram" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="22">
+<section data-label="Demo caso Telegram" class="slide" data-screen-label="26 Demo caso Telegram" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="25">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// DEMO</span> <span class="dot">·</span> Caso de uso</span>
-    <span class="num">23 / 30</span>
+    <span class="num">26 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1617,13 +1813,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      21 · DEMO · TEAM.YAML
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Demo team yaml" class="slide" data-screen-label="24 Demo team yaml" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="23">
+<section data-label="Demo team yaml" class="slide" data-screen-label="27 Demo team yaml" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="26">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// DEMO</span> <span class="dot">·</span> Configuración del equipo</span>
-    <span class="num">24 / 30</span>
+    <span class="num">27 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1684,13 +1880,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      22 · DEMO · FLOW
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Demo flow" class="slide" data-screen-label="25 Demo flow" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="24">
+<section data-label="Demo flow" class="slide" data-screen-label="28 Demo flow" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="27">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// DEMO</span> <span class="dot">·</span> Flujo de mensaje</span>
-    <span class="num">25 / 30</span>
+    <span class="num">28 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1752,13 +1948,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      23 · DEMO · RESULTADO
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Demo resultado" class="slide" data-screen-label="26 Demo resultado" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="25">
+<section data-label="Demo resultado" class="slide" data-screen-label="29 Demo resultado" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="28">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// DEMO</span> <span class="dot">·</span> Resultado</span>
-    <span class="num">26 / 30</span>
+    <span class="num">29 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1790,10 +1986,128 @@ section[data-deck-slide="28"] { background-color: #050d16; }
   </div>
 </section>
 
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · SECTION HEADER — DISEÑA TU AGENTE
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Seccion Disena" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="30 Seccion Disena" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="29">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div style="position:absolute;inset:0;background:
+    radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--cyan) 15%, transparent), transparent 55%),
+    radial-gradient(circle at 20% 80%, color-mix(in oklch, var(--violet) 10%, transparent), transparent 40%);"></div>
+
+  <div style="text-align: center; position: relative; z-index: 2;">
+    <div class="mono" style="font-size: 24px; color: var(--fg-dim); letter-spacing: 0.4em; margin-bottom: 36px;">[ PART · 04 ]</div>
+    <div class="mono" style="font-size: 32px; color: var(--cyan); margin-bottom: 32px; text-shadow: 0 0 20px var(--cyan);">&gt; ./agent --design</div>
+    <h2 class="t-hero" style="font-size: 140px;">
+      Diseña tu <span class="neon-cyan">agente</span>
+    </h2>
+    <div class="divline" style="width: 600px; margin: 48px auto 36px;"></div>
+    <div class="t-sub" style="color: var(--fg-dim); font-weight: 400;">Del rol humano al agente autónomo</div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · EL PROCESO EN 4 PASOS
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="El proceso" class="slide" data-screen-label="31 El proceso" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="30">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// DISEÑA</span> <span class="dot">·</span> Proceso</span>
+    <span class="num">31 / 36</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom: 36px;">
+    <span class="caret"></span><span class="arg">./agent</span> <span class="flag">--blueprint</span>
+  </div>
+
+  <div class="row grow" style="gap: 24px; align-items: stretch;">
+    <div class="panel accent-cyan" style="flex:1; display:flex; flex-direction:column; gap:18px;">
+      <div class="mono neon-cyan" style="font-size: 52px; font-weight: 800; line-height: 1;">01</div>
+      <div class="t-sub" style="font-weight: 600;">Define el rol</div>
+      <div class="t-small" style="color: var(--fg-dim);">¿Qué puesto de tu equipo quieres replicar? Coordinador, PM, soporte, gestor de campañas.</div>
+    </div>
+    <div class="panel accent-cyan" style="flex:1; display:flex; flex-direction:column; gap:18px;">
+      <div class="mono neon-magenta" style="font-size: 52px; font-weight: 800; line-height: 1;">02</div>
+      <div class="t-sub" style="font-weight: 600;">Mapea el proceso</div>
+      <div class="t-small" style="color: var(--fg-dim);">¿Qué entradas recibe? ¿Qué pasos sigue? ¿Qué decisiones toma? ¿Qué entregables produce?</div>
+    </div>
+    <div class="panel accent-cyan" style="flex:1; display:flex; flex-direction:column; gap:18px;">
+      <div class="mono neon-violet" style="font-size: 52px; font-weight: 800; line-height: 1;">03</div>
+      <div class="t-sub" style="font-weight: 600;">Traduce a archivos</div>
+      <div class="t-small" style="color: var(--fg-dim);"><span class="mono" style="color: var(--cyan);">identity</span> · <span class="mono" style="color: var(--magenta);">soul</span> · <span class="mono" style="color: var(--violet);">agent</span> · <span class="mono" style="color: var(--accent);">tools</span> · herbit/cron</div>
+    </div>
+    <div class="panel accent-cyan" style="flex:1; display:flex; flex-direction:column; gap:18px;">
+      <div class="mono neon-accent" style="font-size: 52px; font-weight: 800; line-height: 1;">04</div>
+      <div class="t-sub" style="font-weight: 600;">Itera con IA</div>
+      <div class="t-small" style="color: var(--fg-dim);">Usa Claude, Gemini o Perplexity para proponer borradores de soul, agent y tools. Tú los revisas.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     NUEVO · CASOS DE USO REALES
+     ════════════════════════════════════════════════════════════ -->
+<section data-label="Casos de uso" class="slide" data-screen-label="32 Casos de uso" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="31">
+  <span class="hud tl"></span><span class="hud tr"></span>
+  <span class="hud bl"></span><span class="hud br"></span>
+
+  <div class="topbar">
+    <span><span class="section">// DISEÑA</span> <span class="dot">·</span> Casos reales</span>
+    <span class="num">32 / 36</span>
+  </div>
+
+  <div class="prompt" style="margin-bottom: 36px;">
+    <span class="caret"></span><span class="arg">ls</span> <span class="flag">~/casos/</span>
+  </div>
+
+  <div class="row grow" style="gap: 28px; align-items: stretch;">
+    <div class="panel accent-cyan" style="flex:1; display:flex; flex-direction:column; gap:20px;">
+      <div class="mono neon-cyan" style="font-size: 15px; letter-spacing: 0.2em;">CASO 01</div>
+      <div class="t-sub" style="font-weight: 600;">Equipo virtual en VPS</div>
+      <div class="col" style="gap: 10px; margin-top: 4px;">
+        <div class="mono" style="font-size: 20px;"><span class="neon-cyan">ATENA</span> — Desarrollador Senior</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-magenta">HERMES</span> — Automatización</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-violet">APOLO</span> — Marketing</div>
+        <div class="mono" style="font-size: 20px; color: var(--fg-dim);">+ ARES · POSEIDÓN · ORFEO</div>
+      </div>
+      <div class="t-small" style="color: var(--fg-dim); margin-top: auto;">Un coordinador orquesta a todos. Cada uno con su modelo y herramientas.</div>
+    </div>
+    <div class="panel accent-magenta" style="flex:1; display:flex; flex-direction:column; gap:20px;">
+      <div class="mono neon-magenta" style="font-size: 15px; letter-spacing: 0.2em;">CASO 02</div>
+      <div class="t-sub" style="font-weight: 600;">Asistente personal auto-hospedado</div>
+      <div class="col" style="gap: 10px; margin-top: 4px;">
+        <div class="mono" style="font-size: 20px;"><span class="neon-cyan">◆</span> VPS + Docker + Ubuntu</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-cyan">◆</span> Claude Haiku / Sonnet / Opus</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-cyan">◆</span> Modo ingeniero: debug, consola</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-cyan">◆</span> Carga docs, código, bases de datos</div>
+      </div>
+      <div class="t-small" style="color: var(--fg-dim); margin-top: auto;">Tu IA personal con acceso completo a tu infraestructura.</div>
+    </div>
+    <div class="panel accent-violet" style="flex:1; display:flex; flex-direction:column; gap:20px;">
+      <div class="mono neon-violet" style="font-size: 15px; letter-spacing: 0.2em;">CASO 03</div>
+      <div class="t-sub" style="font-weight: 600;">Seguimiento de equipos</div>
+      <div class="col" style="gap: 10px; margin-top: 4px;">
+        <div class="mono" style="font-size: 20px;"><span class="neon-violet">◆</span> Revisa tareas del equipo</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-violet">◆</span> Resúmenes diarios por Telegram</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-violet">◆</span> Señala bloqueos y retrasos</div>
+        <div class="mono" style="font-size: 20px;"><span class="neon-violet">◆</span> Escala decisiones al líder</div>
+      </div>
+      <div class="t-small" style="color: var(--fg-dim); margin-top: auto;">El PM que nunca duerme y siempre tiene el contexto completo.</div>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════════════════════════════════════════════════════
      24 · SECTION HEADER — CIERRE
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Seccion Cierre" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="27 Seccion Cierre" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="26">
+<section data-label="Seccion Cierre" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="33 Seccion Cierre" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="32">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
@@ -1802,7 +2116,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
     radial-gradient(circle at 70% 50%, color-mix(in oklch, var(--magenta) 15%, transparent), transparent 60%);"></div>
 
   <div style="text-align: center; position: relative; z-index: 2;">
-    <div class="mono" style="font-size: 24px; color: var(--fg-dim); letter-spacing: 0.4em; margin-bottom: 36px;">[ PART · 04 ]</div>
+    <div class="mono" style="font-size: 24px; color: var(--fg-dim); letter-spacing: 0.4em; margin-bottom: 36px;">[ PART · 05 ]</div>
     <div class="mono" style="font-size: 32px; color: var(--accent); margin-bottom: 32px;">&gt; ./community --join</div>
     <h2 class="t-hero" style="font-size: 180px;">
       <span class="neon-cyan">Comunidad</span>
@@ -1815,13 +2129,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      25 · CONTRIBUIR
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Contribuir" class="slide" data-screen-label="28 Contribuir" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="27">
+<section data-label="Contribuir" class="slide" data-screen-label="34 Contribuir" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="33">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// COMUNIDAD</span> <span class="dot">·</span> Cómo contribuir</span>
-    <span class="num">28 / 30</span>
+    <span class="num">34 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1869,13 +2183,13 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      26 · RECURSOS
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Recursos" class="slide" data-screen-label="29 Recursos" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="28">
+<section data-label="Recursos" class="slide" data-screen-label="35 Recursos" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="34">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
   <div class="topbar">
     <span><span class="section">// COMUNIDAD</span> <span class="dot">·</span> Links &amp; recursos</span>
-    <span class="num">29 / 30</span>
+    <span class="num">35 / 36</span>
   </div>
 
   <div class="prompt" style="margin-bottom: var(--gap-title);">
@@ -1924,7 +2238,7 @@ section[data-deck-slide="28"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      27 · GRACIAS · Q&A
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Gracias" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="30 Gracias" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="29">
+<section data-label="Gracias" class="slide" style="justify-content: center; align-items: center; padding: 0;" data-screen-label="36 Gracias" data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text" data-deck-slide="35">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
