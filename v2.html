@@ -159,6 +159,18 @@ section[data-deck-slide="15"] { background-color: #050d16; }
 }
 @keyframes horbit-cw  { from { transform:rotate(0deg);   } to { transform:rotate(360deg);  } }
 @keyframes horbit-ccw { from { transform:rotate(0deg);   } to { transform:rotate(-360deg); } }
+@keyframes hglow-pulse {
+  0%,100% { text-shadow: 0 0 40px color-mix(in oklch,var(--cyan) 55%,transparent), 0 0 80px color-mix(in oklch,var(--cyan) 30%,transparent); }
+  50%     { text-shadow: 0 0 70px color-mix(in oklch,var(--cyan) 80%,transparent), 0 0 140px color-mix(in oklch,var(--cyan) 50%,transparent); }
+}
+@keyframes hglow-pulse-mg {
+  0%,100% { text-shadow: 0 0 40px color-mix(in oklch,var(--magenta) 55%,transparent), 0 0 80px color-mix(in oklch,var(--magenta) 30%,transparent); }
+  50%     { text-shadow: 0 0 70px color-mix(in oklch,var(--magenta) 80%,transparent), 0 0 140px color-mix(in oklch,var(--magenta) 50%,transparent); }
+}
+@keyframes hshine {
+  0%   { left:-100%; }
+  100% { left:200%;  }
+}
 </style>
 
 <script type="application/json" id="speaker-notes">
@@ -229,84 +241,147 @@ section[data-deck-slide="15"] { background-color: #050d16; }
 <!-- ════════════════════════════════════════════════════════════
      01 · PORTADA
      ════════════════════════════════════════════════════════════ -->
-<section data-label="Portada" class="slide" style="padding:0;justify-content:center;align-items:center;" data-screen-label="01 Portada" data-deck-slide="0" data-deck-active="">
+<section data-label="Portada" class="slide" style="padding:0;overflow:hidden;" data-screen-label="01 Portada" data-deck-slide="0" data-deck-active="">
   <span class="hud tl"></span><span class="hud tr"></span>
   <span class="hud bl"></span><span class="hud br"></span>
 
+  <!-- BG atmospheric gradients -->
   <div style="position:absolute;inset:0;background:
-    radial-gradient(ellipse at 28% 42%, color-mix(in oklch,var(--cyan) 18%,transparent), transparent 55%),
-    radial-gradient(ellipse at 76% 62%, color-mix(in oklch,var(--magenta) 18%,transparent), transparent 55%);"></div>
+    radial-gradient(ellipse at 78% 48%, color-mix(in oklch,var(--cyan) 20%,transparent) 0%, transparent 55%),
+    radial-gradient(ellipse at 18% 38%, color-mix(in oklch,var(--magenta) 10%,transparent) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, color-mix(in oklch,var(--violet) 8%,transparent) 0%, transparent 45%);pointer-events:none;"></div>
 
-  <!-- Hero layer -->
+  <!-- Animated BG particles -->
   <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;">
-    <div style="position:absolute;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--cyan) 13%,transparent),transparent 70%);top:-130px;left:-150px;animation:hbreathe 9s ease-in-out infinite;"></div>
-    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--magenta) 11%,transparent),transparent 70%);bottom:-100px;right:-100px;animation:hbreathe 11s ease-in-out infinite;animation-delay:-4s;"></div>
-    <div style="position:absolute;width:700px;height:700px;border-radius:50%;border:1px solid color-mix(in oklch,var(--cyan) 22%,transparent);top:50%;left:50%;animation:hpulse-ring 5s ease-in-out infinite;"></div>
-    <div style="position:absolute;width:880px;height:880px;border-radius:50%;border:1px dashed color-mix(in oklch,var(--magenta) 14%,transparent);top:50%;left:50%;animation:hpulse-ring 7s ease-in-out infinite;animation-delay:-3s;"></div>
-    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-cw 18s linear infinite;">
-      <div style="position:absolute;width:6px;height:6px;top:-3px;left:350px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 30px color-mix(in oklch,var(--cyan) 55%,transparent);"></div>
+    <!-- Massive orbs behind character (right side) -->
+    <div style="position:absolute;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--cyan) 16%,transparent) 0%,transparent 68%);right:-250px;top:50%;transform:translateY(-50%);filter:blur(30px);animation:hbreathe 7s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:650px;height:650px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklch,var(--magenta) 12%,transparent) 0%,transparent 68%);right:-60px;top:50%;transform:translateY(-50%);filter:blur(40px);animation:hbreathe 9s ease-in-out infinite;animation-delay:-4s;"></div>
+    <!-- Pulse rings centered on character -->
+    <div style="position:absolute;width:860px;height:860px;border-radius:50%;border:1px solid color-mix(in oklch,var(--cyan) 20%,transparent);right:30px;top:50%;transform:translateY(-50%);animation:hpulse-ring 6s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:1060px;height:1060px;border-radius:50%;border:1px dashed color-mix(in oklch,var(--magenta) 12%,transparent);right:-70px;top:50%;transform:translateY(-50%);animation:hpulse-ring 8s ease-in-out infinite;animation-delay:-4s;"></div>
+    <!-- Orbiting dots around character -->
+    <div style="position:absolute;top:50%;right:430px;width:0;height:0;animation:horbit-cw 14s linear infinite;">
+      <div style="position:absolute;width:9px;height:9px;top:-4.5px;left:400px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan),0 0 45px color-mix(in oklch,var(--cyan) 55%,transparent);"></div>
     </div>
-    <div style="position:absolute;top:50%;left:50%;width:0;height:0;animation:horbit-ccw 13s linear infinite;animation-delay:-5s;">
-      <div style="position:absolute;width:5px;height:5px;top:-2.5px;left:300px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 26px color-mix(in oklch,var(--magenta) 55%,transparent);"></div>
+    <div style="position:absolute;top:50%;right:430px;width:0;height:0;animation:horbit-ccw 10s linear infinite;animation-delay:-3s;">
+      <div style="position:absolute;width:7px;height:7px;top:-3.5px;left:310px;border-radius:50%;background:var(--magenta);box-shadow:0 0 14px var(--magenta),0 0 35px color-mix(in oklch,var(--magenta) 55%,transparent);"></div>
     </div>
-    <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,color-mix(in oklch,var(--cyan) 55%,transparent) 35%,color-mix(in oklch,var(--magenta) 55%,transparent) 65%,transparent);animation:hscan 10s linear infinite;"></div>
-    <div style="position:absolute;top:8%;left:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 8s ease-in-out infinite;"></div>
-    <div style="position:absolute;top:45%;left:3%;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan),0 0 32px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 10.5s ease-in-out infinite;animation-delay:-2.5s;"></div>
-    <div style="position:absolute;top:18%;right:8%;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 28px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-3.5s;"></div>
-    <div style="position:absolute;top:73%;right:5%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 24px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-0.8s;"></div>
-    <div style="position:absolute;top:14%;left:24%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-1.8s;"></div>
-    <div style="position:absolute;top:22%;right:24%;width:6px;height:6px;border-radius:50%;background:var(--magenta);box-shadow:0 0 12px var(--magenta),0 0 28px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-0.5s;"></div>
-    <div style="position:absolute;top:79%;right:19%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 8s ease-in-out infinite;animation-delay:-2.2s;"></div>
-    <div style="position:absolute;top:50%;left:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-4.5s;"></div>
-    <div style="position:absolute;top:56%;right:9%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 9.5s ease-in-out infinite;animation-delay:-1.5s;"></div>
-    <svg style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:170px;height:440px;opacity:0.16;" viewBox="0 0 170 440" fill="none">
-      <path d="M170 55 H110 L78 88 V165 L45 198 H12" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M170 228 H94 L70 252 V328 L44 358 H12" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M170 390 H112 L88 414 H12" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="110" cy="55" r="3.5" fill="#00f0ff"/><circle cx="78" cy="88" r="3.5" fill="#00f0ff"/><circle cx="45" cy="198" r="3.5" fill="#00f0ff"/>
-      <circle cx="94" cy="228" r="3.5" fill="#ff2fb5"/><circle cx="44" cy="358" r="3.5" fill="#ff2fb5"/>
-      <circle cx="88" cy="414" r="3.5" fill="#a855f7"/>
+    <div style="position:absolute;top:50%;right:430px;width:0;height:0;animation:horbit-cw 20s linear infinite;animation-delay:-7s;">
+      <div style="position:absolute;width:5px;height:5px;top:-2.5px;left:480px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet),0 0 25px color-mix(in oklch,var(--violet) 55%,transparent);"></div>
+    </div>
+    <!-- Scan line full width -->
+    <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,color-mix(in oklch,var(--cyan) 50%,transparent) 35%,color-mix(in oklch,var(--magenta) 50%,transparent) 65%,transparent 100%);animation:hscan 11s linear infinite;"></div>
+    <!-- Floating particles left quadrant -->
+    <div style="position:absolute;top:10%;left:6%;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 28px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 8s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:42%;left:3%;width:5px;height:5px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta),0 0 24px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 10s ease-in-out infinite;animation-delay:-2s;"></div>
+    <div style="position:absolute;top:72%;left:14%;width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet),0 0 20px color-mix(in oklch,var(--violet) 50%,transparent);animation:hfloat 9s ease-in-out infinite;animation-delay:-4s;"></div>
+    <div style="position:absolute;top:82%;left:46%;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 22px color-mix(in oklch,var(--cyan) 50%,transparent);animation:hfloat 11s ease-in-out infinite;animation-delay:-1.2s;"></div>
+    <div style="position:absolute;top:20%;left:44%;width:4px;height:4px;border-radius:50%;background:var(--magenta);box-shadow:0 0 8px var(--magenta),0 0 18px color-mix(in oklch,var(--magenta) 50%,transparent);animation:hfloat 9.5s ease-in-out infinite;animation-delay:-3.5s;"></div>
+    <!-- Left edge circuit lines -->
+    <svg style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:120px;height:460px;opacity:0.20;" viewBox="0 0 120 460" fill="none">
+      <path d="M120 60 H78 L55 83 V170 L32 193 H6" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M120 230 H72 L50 252 V330 L28 352 H6" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M120 400 H80 L58 422 H6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="78" cy="60" r="3" fill="#00f0ff"/><circle cx="55" cy="83" r="3" fill="#00f0ff"/>
+      <circle cx="72" cy="230" r="3" fill="#ff2fb5"/><circle cx="28" cy="352" r="3" fill="#ff2fb5"/>
+      <circle cx="80" cy="400" r="3" fill="#a855f7"/>
     </svg>
-    <svg style="position:absolute;top:50%;right:0;transform:translateY(-50%) scaleX(-1);width:170px;height:440px;opacity:0.16;" viewBox="0 0 170 440" fill="none">
-      <path d="M170 55 H110 L78 88 V165 L45 198 H12" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M170 228 H94 L70 252 V328 L44 358 H12" stroke="#ff2fb5" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M170 390 H112 L88 414 H12" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="110" cy="55" r="3.5" fill="#00f0ff"/><circle cx="78" cy="88" r="3.5" fill="#00f0ff"/><circle cx="45" cy="198" r="3.5" fill="#00f0ff"/>
-      <circle cx="94" cy="228" r="3.5" fill="#ff2fb5"/><circle cx="44" cy="358" r="3.5" fill="#ff2fb5"/>
-      <circle cx="88" cy="414" r="3.5" fill="#a855f7"/>
-    </svg>
+    <!-- Vertical divider glow -->
+    <div style="position:absolute;left:52%;top:60px;bottom:60px;width:1px;background:linear-gradient(180deg,transparent 0%,color-mix(in oklch,var(--cyan) 35%,transparent) 25%,color-mix(in oklch,var(--cyan) 35%,transparent) 75%,transparent 100%);"></div>
   </div>
 
-  <div style="position:absolute;top:60px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--fg-muted);letter-spacing:0.15em;text-transform:uppercase;">
-    <span>FLISoL / Medellín / 2026</span>
-    <span class="neon-accent">// TALK_02</span>
+  <!-- ── TOP BAR ── -->
+  <div style="position:absolute;top:44px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--fg-muted);letter-spacing:0.12em;text-transform:uppercase;z-index:10;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="color:var(--accent);font-weight:700;font-size:20px;">▶</span>
+      <span>FLISoL / Medellín / 2026</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <span style="color:var(--fg-muted);letter-spacing:0.06em;">Open Source · AI Agents · Free Software</span>
+      <span style="color:var(--cyan);font-size:15px;border:1px solid color-mix(in oklch,var(--cyan) 45%,transparent);padding:4px 16px;border-radius:4px;box-shadow:0 0 14px color-mix(in oklch,var(--cyan) 20%,transparent);">TALK_02</span>
+    </div>
   </div>
 
-  <div style="position:relative;z-index:2;text-align:center;padding:0 100px;">
-    <div class="mono" style="font-size:26px;color:var(--fg-dim);letter-spacing:0.3em;margin-bottom:28px;">
-      <span style="color:var(--accent-2);">&gt;</span> ./openclaw <span style="color:var(--accent);">--agents</span>
+  <!-- ── LEFT CONTENT PANEL ── -->
+  <div style="position:absolute;left:0;top:0;width:52%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:130px 60px 110px 80px;z-index:5;">
+
+    <!-- Pre-label bar -->
+    <div style="display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--accent-2);letter-spacing:0.35em;text-transform:uppercase;margin-bottom:32px;">
+      <span style="display:inline-block;width:36px;height:1px;background:var(--accent-2);opacity:0.7;"></span>
+      OpenClaw · Agentes con IA
+      <span style="display:inline-block;width:36px;height:1px;background:var(--accent-2);opacity:0.7;"></span>
     </div>
-    <img src="assets/Heros.png" alt="" style="height:148px;width:auto;margin:0 auto 14px;display:block;filter:drop-shadow(0 0 32px rgba(0,240,255,0.4)) drop-shadow(0 0 60px rgba(255,47,181,0.3));">
-    <div class="t-title neon-cyan"  style="font-size:100px;line-height:1.0;letter-spacing:-0.02em;">De prompts</div>
-    <div class="t-title neon-magenta" style="font-size:100px;line-height:1.0;letter-spacing:-0.02em;">a decisiones</div>
-    <div class="divline" style="width:540px;margin:22px auto 22px;"></div>
-    <div class="t-sub" style="color:var(--fg);font-weight:400;margin-bottom:16px;">
-      Cómo construir agentes que ejecutan con OpenClaw
+
+    <!-- Giant title -->
+    <div style="font-size:105px;font-weight:800;line-height:0.88;letter-spacing:-0.03em;margin-bottom:8px;color:var(--fg);">De</div>
+    <div style="font-size:122px;font-weight:800;line-height:0.88;letter-spacing:-0.03em;color:var(--cyan);animation:hglow-pulse 4s ease-in-out infinite;margin-bottom:10px;">prompts</div>
+    <div style="font-size:64px;font-weight:300;line-height:1;letter-spacing:0.08em;color:var(--fg-dim);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">──── a ────</div>
+    <div style="font-size:122px;font-weight:800;line-height:0.88;letter-spacing:-0.03em;color:var(--magenta);animation:hglow-pulse-mg 4s ease-in-out infinite;animation-delay:-2s;margin-bottom:44px;">decisiones</div>
+
+    <!-- Gradient divider -->
+    <div style="height:1px;background:linear-gradient(90deg,color-mix(in oklch,var(--cyan) 70%,transparent),color-mix(in oklch,var(--magenta) 50%,transparent),transparent);margin-bottom:28px;"></div>
+
+    <!-- Subtitle -->
+    <div style="font-size:26px;font-weight:400;color:var(--fg);line-height:1.45;margin-bottom:8px;">
+      Cómo construir agentes que <span style="color:var(--cyan);font-weight:600;">ejecutan</span> con OpenClaw
     </div>
-    <div class="mono" style="font-size:22px;color:var(--fg-muted);font-style:italic;letter-spacing:0.1em;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--fg-muted);font-style:italic;letter-spacing:0.1em;margin-bottom:36px;">
       La diferencia entre responder… y actuar
     </div>
+
+    <!-- Chip tags -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:44px;">
+      <span class="chip active" style="font-size:15px;padding:6px 18px;">Multi-Agent</span>
+      <span class="chip active" style="font-size:15px;padding:6px 18px;">Autonomous</span>
+      <span class="chip active" style="font-size:15px;padding:6px 18px;">Open Source</span>
+      <span style="display:inline-flex;align-items:center;padding:6px 18px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:15px;border:1px solid color-mix(in oklch,var(--violet) 45%,transparent);color:var(--violet);background:color-mix(in oklch,var(--violet) 7%,var(--bg-panel));">Claude · LLMs</span>
+    </div>
+
+    <!-- Speaker card -->
+    <div style="display:flex;align-items:center;gap:18px;background:color-mix(in oklch,var(--cyan) 4%,var(--bg-panel));border:1px solid color-mix(in oklch,var(--cyan) 22%,transparent);border-radius:14px;padding:18px 24px;box-shadow:0 0 30px color-mix(in oklch,var(--cyan) 8%,transparent);">
+      <img src="assets/diego.png" alt="Diego Escobar" style="width:62px;height:62px;border-radius:50%;border:2px solid var(--cyan);object-fit:cover;filter:drop-shadow(0 0 12px rgba(0,240,255,0.6));">
+      <div style="flex:1;">
+        <div style="font-size:24px;font-weight:700;color:var(--fg);letter-spacing:-0.01em;">Diego Escobar</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--fg-dim);margin-top:3px;">Especialista IA · Innovación · Transformación Digital</div>
+      </div>
+      <div style="text-align:right;padding-left:16px;border-left:1px solid var(--line-strong);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fg-muted);letter-spacing:0.12em;text-transform:uppercase;">Duración</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;color:var(--accent);font-weight:700;margin-top:2px;">30 min</div>
+      </div>
+    </div>
   </div>
 
-  <div style="position:absolute;bottom:60px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:end;font-family:'JetBrains Mono',monospace;">
-    <div>
-      <div style="color:var(--fg-dim);font-size:16px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Speaker</div>
-      <div style="color:var(--fg);font-size:26px;">Diego Escobar</div>
-      <div style="color:var(--fg-dim);font-size:18px;margin-top:4px;">Especialista IA · Innovación · Transformación Digital</div>
+  <!-- ── RIGHT: HEROS CHARACTER ── -->
+  <div style="position:absolute;right:0;top:0;width:50%;height:100%;z-index:4;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">
+    <!-- Deep glow bloom behind character -->
+    <div style="position:absolute;width:750px;height:750px;border-radius:50%;background:radial-gradient(circle,rgba(0,240,255,0.22) 0%,rgba(168,85,247,0.10) 40%,transparent 68%);top:50%;left:50%;transform:translate(-50%,-52%);filter:blur(50px);animation:hbreathe 5s ease-in-out infinite;"></div>
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,47,181,0.18) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-52%);filter:blur(55px);animation:hbreathe 7s ease-in-out infinite;animation-delay:-3.5s;"></div>
+    <!-- Character image -->
+    <img src="assets/Heros.png" alt="Heros OpenClaw" style="position:relative;z-index:2;height:980px;width:auto;object-fit:contain;filter:drop-shadow(0 0 55px rgba(0,240,255,0.50)) drop-shadow(0 0 110px rgba(255,47,181,0.28)) drop-shadow(0 20px 40px rgba(0,0,0,0.8));margin-bottom:-20px;">
+    <!-- Floor fade -->
+    <div style="position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(0deg,var(--bg) 0%,transparent 100%);z-index:3;"></div>
+    <!-- OpenClaw badge -->
+    <div style="position:absolute;top:80px;right:52px;z-index:10;">
+      <div style="position:relative;background:linear-gradient(135deg,color-mix(in oklch,var(--cyan) 12%,var(--bg-panel)),color-mix(in oklch,var(--magenta) 10%,var(--bg-panel)));border:1px solid color-mix(in oklch,var(--cyan) 40%,transparent);border-radius:14px;padding:14px 24px;box-shadow:0 0 40px color-mix(in oklch,var(--cyan) 18%,transparent);overflow:hidden;">
+        <div style="position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);animation:hshine 4s ease-in-out infinite;animation-delay:1s;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.3em;color:var(--fg-dim);text-transform:uppercase;margin-bottom:5px;">powered by</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--cyan);letter-spacing:0.04em;">OpenClaw</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fg-muted);margin-top:4px;letter-spacing:0.1em;">v2.0 · open source</div>
+      </div>
     </div>
-    <div style="text-align:right;">
-      <div style="color:var(--fg-dim);font-size:16px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Session</div>
-      <div style="color:var(--accent);font-size:22px;">30:00 · LIVE</div>
+  </div>
+
+  <!-- ── BOTTOM STATUS BAR ── -->
+  <div style="position:absolute;bottom:36px;left:60px;right:60px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--fg-muted);z-index:10;border-top:1px solid var(--line);padding-top:18px;">
+    <div style="display:flex;gap:24px;align-items:center;">
+      <span>github.com/openclaw</span>
+      <span style="color:var(--line-strong);">|</span>
+      <span>@diegoe · Telegram</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--magenta);box-shadow:0 0 10px var(--magenta);display:inline-block;animation:hbreathe 2s ease-in-out infinite;"></span>
+      <span style="color:var(--accent);font-weight:600;letter-spacing:0.08em;">EN VIVO</span>
+      <span>· FLISoL Medellín 2026</span>
     </div>
   </div>
 </section>
