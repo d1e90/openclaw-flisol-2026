@@ -710,21 +710,33 @@ section[data-deck-slide="33"] { background-color: #050d16; }
     <span class="caret"></span><span class="arg">whoami</span>
   </div>
 
-  <div class="col" style="gap: 32px;">
-    <div>
-      <div class="mono" style="color: var(--fg-muted); font-size: 22px; letter-spacing: 0.15em; margin-bottom: 12px;">$ cat /profile/name</div>
-      <div class="t-title"><span class="neon-cyan">Diego</span> Escobar</div>
+  <div class="row grow" style="gap: 80px; align-items: center;">
+    <!-- Avatar -->
+    <div style="width: 420px; height: 420px; border: 2px solid var(--accent); position: relative; flex-shrink: 0; overflow: hidden;
+      box-shadow: 0 0 calc(var(--glow) * 40px) color-mix(in oklch, var(--accent) 30%, transparent);">
+      <img src="assets/diego.png" alt="Diego Escobar" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;">
+      <span class="hud tl" style="top:-1px;left:-1px;"></span>
+      <span class="hud tr" style="top:-1px;right:-1px;"></span>
+      <span class="hud bl" style="bottom:-1px;left:-1px;"></span>
+      <span class="hud br" style="bottom:-1px;right:-1px;"></span>
     </div>
-    <div>
-      <div class="mono" style="color: var(--fg-muted); font-size: 22px; letter-spacing: 0.15em; margin-bottom: 12px;">$ cat /profile/role</div>
-      <div class="t-sub" style="font-weight: 400;">Especialista en Inteligencia Artificial</div>
-      <div class="t-body" style="color: var(--fg-dim); margin-top: 8px;">Innovación &amp; Transformación Digital</div>
-    </div>
-    <div style="display:flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;">
-      <span class="chip active">AI Systems</span>
-      <span class="chip active">Multi-Agent</span>
-      <span class="chip active">Automation</span>
-      <span class="chip active">Open Source</span>
+
+    <div class="col" style="gap: 32px;">
+      <div>
+        <div class="mono" style="color: var(--fg-muted); font-size: 22px; letter-spacing: 0.15em; margin-bottom: 12px;">$ cat /profile/name</div>
+        <div class="t-title"><span class="neon-cyan">Diego</span> Escobar</div>
+      </div>
+      <div>
+        <div class="mono" style="color: var(--fg-muted); font-size: 22px; letter-spacing: 0.15em; margin-bottom: 12px;">$ cat /profile/role</div>
+        <div class="t-sub" style="font-weight: 400;">Especialista en Inteligencia Artificial</div>
+        <div class="t-body" style="color: var(--fg-dim); margin-top: 8px;">Innovación &amp; Transformación Digital</div>
+      </div>
+      <div style="display:flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;">
+        <span class="chip active">AI Systems</span>
+        <span class="chip active">Multi-Agent</span>
+        <span class="chip active">Automation</span>
+        <span class="chip active">Open Source</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1005,11 +1017,11 @@ section[data-deck-slide="33"] { background-color: #050d16; }
         <div style="text-align: center; position: relative; padding-top: 28px;">
           <div style="position:absolute; top:2px; left:50%; transform:translateX(-50%); width:16px; height:16px; border-radius:50%; background: var(--accent); box-shadow: 0 0 14px var(--accent);"></div>
           <div class="mono" style="font-size: 13px; color: var(--fg-muted);">ENE 2026</div>
-          <div style="font-size: 20px; font-weight: 600;"><span class="neon-magenta">+100K ⭐</span></div>
+          <div style="font-size: 20px; font-weight: 600;"><span class="neon-accent">+100K ⭐</span></div>
         </div>
         <div style="text-align: center; position: relative; padding-top: 28px;">
-          <div style="position:absolute; top:0px; left:50%; transform:translateX(-50%); width:22px; height:22px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 20px var(--magenta); border: 2px solid var(--fg);"></div>
-          <div class="mono" style="font-size: 13px; color: var(--fg-muted);">ABR 2026</div>
+          <div style="position:absolute; top:2px; left:50%; transform:translateX(-50%); width:18px; height:18px; border-radius:50%; background: var(--magenta); box-shadow: 0 0 16px var(--magenta); border: 2px solid var(--fg);"></div>
+          <div class="mono" style="font-size: 13px; color: var(--fg-muted);">14 FEB 2026</div>
           <div style="font-size: 20px; font-weight: 600; color: var(--fg);">→ OpenAI · fundación</div>
         </div>
         <div style="text-align: center; position: relative; padding-top: 28px;">
@@ -1065,7 +1077,7 @@ section[data-deck-slide="33"] { background-color: #050d16; }
         Vivimos respondiendo <span class="neon-magenta">lo mismo</span>, en <span class="neon-cyan">canales distintos</span>.
       </div>
       <div class="t-body" style="color: var(--fg-dim); max-width: 720px;">
-        WhatsApp, Telegram, Slack, Discord, correo. Cada uno con su propio silla, su propio contexto, su propio tono. El trabajo no escala.
+        WhatsApp, Telegram, Slack, Discord, correo. Cada uno con su propia silla, su propio contexto, su propio tono. El trabajo no escala.
       </div>
     </div>
 
@@ -1073,11 +1085,11 @@ section[data-deck-slide="33"] { background-color: #050d16; }
       <div class="panel-label">PROCESS LIST</div>
       <div class="mono" style="font-size: 22px; line-height: 1.9;">
         <div><span style="color:var(--fg-muted);">PID&nbsp;&nbsp;&nbsp;CMD</span></div>
-        <div><span style="color:var(--accent);">responder_whatsapp</span></div>
-        <div><span style="color:var(--accent-2);">atender_telegram</span></div>
-        <div><span style="color:var(--accent);">reporte_slack</span></div>
-        <div><span style="color:var(--accent-2);">soporte_discord</span></div>
-        <div><span style="color:var(--accent);">mail_interno</span></div>
+        <div><span style="color:var(--fg-muted);">2041&nbsp;</span><span style="color:var(--accent);">responder_whatsapp</span></div>
+        <div><span style="color:var(--fg-muted);">2042&nbsp;</span><span style="color:var(--accent-2);">atender_telegram</span></div>
+        <div><span style="color:var(--fg-muted);">2043&nbsp;</span><span style="color:var(--accent);">reporte_slack</span></div>
+        <div><span style="color:var(--fg-muted);">2044&nbsp;</span><span style="color:var(--accent-2);">soporte_discord</span></div>
+        <div><span style="color:var(--fg-muted);">2045&nbsp;</span><span style="color:var(--accent);">mail_interno</span></div>
         <div><span style="color:var(--fg-muted);">...&nbsp;&nbsp;&nbsp;</span><span class="neon-magenta" style="color:var(--magenta);">× cada día</span></div>
       </div>
     </div>
@@ -1332,7 +1344,7 @@ section[data-deck-slide="33"] { background-color: #050d16; }
 
   <div class="row" style="gap: 40px; align-items: flex-start; margin-bottom: 20px;">
     <div class="t-title" style="line-height: 1.1; flex: 1;">
-      Un <span class="neon-cyan">gateway self-hosted</span> que conecta tus apps de mensajería favoritas con <span class="neon-magenta">agentes de IA</span>.
+      Un <span class="neon-cyan">gateway self-hosted</span> que conecta tus apps de mensajería con <span class="neon-magenta">agentes de IA</span>.
     </div>
     <!-- Download / GitHub stats column -->
     <div class="col" style="gap: 14px; flex: 0 0 auto;">
@@ -2327,40 +2339,41 @@ section[data-deck-slide="33"] { background-color: #050d16; }
   </div>
 
   <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; flex: 1;">
-    <div class="panel accent-cyan" style="display:flex; align-items:center; gap: 40px; padding: 28px 40px;">
-      <div class="mono neon-cyan" style="font-size: 40px; width: 100px; font-weight: 700;">◇</div>
-      <div class="col grow" style="gap: 6px;">
-        <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.15em;">DOCS</div>
-        <div class="t-sub" style="font-weight: 500;">docs.openclaw.ai</div>
-      </div>
-      <div class="t-small" style="color: var(--fg-dim); max-width: 500px;">Guía completa de instalación, configuración y referencia CLI.</div>
+    <div class="panel accent-cyan" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">🧪</div>
+      <div class="panel-label">01 · USE</div>
+      <div class="t-sub" style="font-weight: 500;">Probar &amp; reportar</div>
+      <div class="t-small">Instala, usa, rompe. Abre issues cuando algo falle. Cada bug documentado vale oro.</div>
     </div>
-
-    <div class="panel accent-magenta" style="display:flex; align-items:center; gap: 40px; padding: 28px 40px;">
-      <div class="mono neon-magenta" style="font-size: 40px; width: 100px; font-weight: 700;">◆</div>
-      <div class="col grow" style="gap: 6px;">
-        <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.15em;">CODE</div>
-        <div class="t-sub" style="font-weight: 500;">github.com/openclaw/openclaw</div>
-      </div>
-      <div class="t-small" style="color: var(--fg-dim); max-width: 500px;">Repositorio MIT. Issues, releases, roadmap y código fuente.</div>
+    <div class="panel accent-cyan" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">🔌</div>
+      <div class="panel-label">02 · BUILD</div>
+      <div class="t-sub" style="font-weight: 500;">Construir plugins</div>
+      <div class="t-small">Hay canales LATAM sin plugin aún. Bold, Nequi, Rappi-chat. Oportunidad clara.</div>
     </div>
-
-    <div class="panel accent-violet" style="display:flex; align-items:center; gap: 40px; padding: 28px 40px;">
-      <div class="mono neon-violet" style="font-size: 40px; width: 100px; font-weight: 700;">▲</div>
-      <div class="col grow" style="gap: 6px;">
-        <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.15em;">CHAT</div>
-        <div class="t-sub" style="font-weight: 500;">discord.com/invite/clawd</div>
-      </div>
-      <div class="t-small" style="color: var(--fg-dim); max-width: 500px;">Discord oficial — hispanohablantes bienvenidos. Preguntas, showcase, ayuda.</div>
+    <div class="panel accent-cyan" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">📝</div>
+      <div class="panel-label">03 · DOCS</div>
+      <div class="t-sub" style="font-weight: 500;">Documentar casos</div>
+      <div class="t-small">Escribe tu use-case. Traduce al español. Graba tutoriales. Educa a la comunidad.</div>
     </div>
-
-    <div class="panel accent-cyan" style="display:flex; align-items:center; gap: 40px; padding: 28px 40px;">
-      <div class="mono neon-cyan" style="font-size: 40px; width: 100px; font-weight: 700;">●</div>
-      <div class="col grow" style="gap: 6px;">
-        <div class="mono" style="font-size: 20px; color: var(--fg-muted); letter-spacing: 0.15em;">CONTACT</div>
-        <div class="t-sub" style="font-weight: 500;">Diego Escobar · Especialista IA</div>
-      </div>
-      <div class="t-small" style="color: var(--fg-dim); max-width: 500px;">Para casos de uso corporativos e implementaciones concretas.</div>
+    <div class="panel accent-magenta" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">💬</div>
+      <div class="panel-label" style="color: var(--magenta);">04 · HELP</div>
+      <div class="t-sub" style="font-weight: 500;">Discord &amp; foros</div>
+      <div class="t-small">Responde a otros constructores. La comunidad se sostiene así.</div>
+    </div>
+    <div class="panel accent-magenta" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">📢</div>
+      <div class="panel-label" style="color: var(--magenta);">05 · SHARE</div>
+      <div class="t-sub" style="font-weight: 500;">Contar en tu red</div>
+      <div class="t-small">Un tweet, un post, una demo en tu empresa. Amplifica el proyecto.</div>
+    </div>
+    <div class="panel accent-magenta" style="display:flex; flex-direction:column; gap: 12px;">
+      <div style="font-size: 52px; line-height: 1;">⌨️</div>
+      <div class="panel-label" style="color: var(--magenta);">06 · CODE</div>
+      <div class="t-sub" style="font-weight: 500;">Pull requests</div>
+      <div class="t-small">Good-first-issues abiertos en GitHub. Empieza pequeño, crece con el proyecto.</div>
     </div>
   </div>
 </section>
