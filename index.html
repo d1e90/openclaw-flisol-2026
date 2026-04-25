@@ -1956,27 +1956,27 @@ section[data-deck-slide="30"] { background-color: #050d16; }
       <div class="arch-node chan" style="padding: 22px 18px;">
         <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em; margin-bottom: 8px;">01</div>
         <div style="font-size: 22px;">Telegram</div>
-        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">"campaña del plan Pro"</div>
+        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">solicitud del usuario</div>
       </div>
       <div class="arch-node core" style="padding: 22px 18px;">
         <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em; margin-bottom: 8px;">02</div>
         <div style="font-size: 22px;">Gateway</div>
-        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">sesión · auth</div>
+        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">valida sesión y contexto</div>
       </div>
       <div class="arch-node agent" style="padding: 22px 18px;">
         <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em; margin-bottom: 8px;">03</div>
         <div style="font-size: 22px;" class="neon-accent">Viky</div>
-        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">intent → APOLO</div>
+        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">detecta intención y delega</div>
       </div>
       <div class="arch-node agent" style="padding: 22px 18px;">
         <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em; margin-bottom: 8px;">04</div>
         <div style="font-size: 22px;">APOLO + ORFEO</div>
-        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">handoff colaborativo</div>
+        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">coordinación de agentes</div>
       </div>
       <div class="arch-node chan" style="padding: 22px 18px;">
         <div class="mono" style="font-size: 14px; color: var(--fg-muted); letter-spacing: 0.15em; margin-bottom: 8px;">05</div>
         <div style="font-size: 22px;">Respuesta</div>
-        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">vía Telegram</div>
+        <div style="font-size: 14px; color: var(--fg-dim); margin-top: 8px;">entregada al usuario</div>
       </div>
     </div>
 
@@ -1993,11 +1993,11 @@ section[data-deck-slide="30"] { background-color: #050d16; }
     </div>
 
     <div class="terminal" style="margin-top: 24px; padding-top: 42px;">
-      <div class="line"><span class="pre">[12:04:22]</span> <span class="cmd">gateway</span> &lt; telegram:@diego "campaña plan Pro"</div>
-      <div class="line"><span class="pre">[12:04:22]</span> <span class="cmd">viky</span>         intent=<span class="str">"marketing_launch"</span> → route(<span class="str">APOLO</span>)</div>
-      <div class="line"><span class="pre">[12:04:23]</span> <span class="cmd">APOLO</span> plan=<span class="str">"3-phase funnel"</span> · handoff(<span class="str">ORFEO, ARES</span>)</div>
-      <div class="line"><span class="pre">[12:04:24]</span> <span class="cmd">ORFEO</span> → <span class="ok">{ posts: 4, video: 1, landing: 1 }</span></div>
-      <div class="line"><span class="pre">[12:04:25]</span> <span class="cmd">gateway</span> &gt; telegram:@diego "Funnel + assets listos en 20 min…"</div>
+      <div class="line"><span class="pre">[12:04:22]</span> <span class="cmd">gateway</span>  &lt; telegram:@diego <span class="str">"hazme una campaña para lanzar el plan Pro"</span></div>
+      <div class="line"><span class="pre">[12:04:22]</span> <span class="cmd">viky</span>     sesión validada · intención=<span class="str">"lanzamiento_marketing"</span> → delega a <span class="str">APOLO</span></div>
+      <div class="line"><span class="pre">[12:04:23]</span> <span class="cmd">APOLO</span>    estrategia=<span class="str">"embudo 3 fases"</span> · coordina con <span class="str">ORFEO</span> y <span class="str">ARES</span></div>
+      <div class="line"><span class="pre">[12:04:24]</span> <span class="cmd">ORFEO</span>    → <span class="ok">{ publicaciones: 4, video: 1, landing: 1 }</span></div>
+      <div class="line"><span class="pre">[12:04:25]</span> <span class="cmd">gateway</span>  &gt; telegram:@diego <span class="str">"Funnel + contenidos listos en 20 min…"</span></div>
     </div>
   </div>
 </section>
