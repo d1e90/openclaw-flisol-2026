@@ -1229,30 +1229,51 @@ section[data-deck-slide="33"] { background-color: #050d16; }
     <span class="caret"></span><span class="arg">cat</span> <span class="flag">/var/log/privacidad.log</span>
   </div>
 
-  <div class="row grow" style="gap: 60px;">
-    <div class="col" style="flex: 1.2; gap: 32px;">
-      <div class="t-title" style="line-height: 1.05;">
-        Cuando conectas un asistente comercial a tu <span class="neon-cyan">canal corporativo</span>…
+  <div class="col grow" style="gap: 34px;">
+    <div class="t-title" style="line-height: 1.05; max-width: 1320px;">
+      Cada mensaje que sale de tu <span class="neon-cyan">canal corporativo</span> es un dato que ya no controlas.
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <div class="panel accent-magenta" style="display:flex; align-items:center; gap: 22px; padding: 28px;">
+        <div class="mono neon-magenta" style="font-size: 58px; line-height:1;">↗</div>
+        <div>
+          <div class="panel-label" style="color: var(--magenta); margin-bottom: 8px;">MENSAJES</div>
+          <div class="t-sub" style="font-size: 32px; font-weight: 600;">WhatsApp · Slack</div>
+          <div class="t-small" style="color: var(--fg-dim); font-size: 22px;">Conversaciones sensibles.</div>
+        </div>
       </div>
-      <div class="t-body" style="color: var(--fg-dim);">
-        …le estás entregando mensajes, archivos y contactos a un tercero. Para equipos en salud, finanzas, legal o público, eso no es solo filosofía: es incumplimiento.
+      <div class="panel accent-magenta" style="display:flex; align-items:center; gap: 22px; padding: 28px;">
+        <div class="mono neon-magenta" style="font-size: 58px; line-height:1;">▣</div>
+        <div>
+          <div class="panel-label" style="color: var(--magenta); margin-bottom: 8px;">ARCHIVOS</div>
+          <div class="t-sub" style="font-size: 32px; font-weight: 600;">PDF · contratos</div>
+          <div class="t-small" style="color: var(--fg-dim); font-size: 22px;">Adjuntos fuera de casa.</div>
+        </div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 12px;">
-        <div class="mono" style="font-size: 22px; color: var(--fg);"><span class="neon-accent">◆</span> Ley 1581 de 2012 · Colombia</div>
-        <div class="mono" style="font-size: 22px; color: var(--fg);"><span class="neon-accent">◆</span> GDPR · Unión Europea</div>
-        <div class="mono" style="font-size: 22px; color: var(--fg);"><span class="neon-accent">◆</span> HIPAA · Salud / PCI-DSS · Finanzas</div>
+      <div class="panel accent-magenta" style="display:flex; align-items:center; gap: 22px; padding: 28px;">
+        <div class="mono neon-magenta" style="font-size: 58px; line-height:1;">⚖</div>
+        <div>
+          <div class="panel-label" style="color: var(--magenta); margin-bottom: 8px;">COMPLIANCE</div>
+          <div class="t-sub" style="font-size: 32px; font-weight: 600;">Ley 1581 · GDPR</div>
+          <div class="t-small" style="color: var(--fg-dim); font-size: 22px;">Salud, finanzas, legal.</div>
+        </div>
       </div>
     </div>
 
-    <div class="panel accent-magenta" style="flex: 1; background: #03050c; align-self: stretch; display:flex; flex-direction:column; justify-content:center;">
-      <div class="panel-label" style="color: var(--magenta);">AUDIT.LOG</div>
-      <div class="mono" style="font-size: 20px; line-height: 2;">
-        <div><span style="color:var(--fg-muted);">[12:04:22]</span> <span class="err" style="color:#ff6b8b;">OUT</span> msg_whatsapp → vendor.ai</div>
-        <div><span style="color:var(--fg-muted);">[12:04:23]</span> <span class="err" style="color:#ff6b8b;">OUT</span> file_contract.pdf → vendor.ai</div>
-        <div><span style="color:var(--fg-muted);">[12:04:24]</span> <span class="err" style="color:#ff6b8b;">OUT</span> customer_db → vendor.ai</div>
-        <div><span style="color:var(--fg-muted);">[12:04:25]</span> <span class="err" style="color:#ff6b8b;">OUT</span> internal_chat → vendor.ai</div>
-        <div style="margin-top: 14px;"><span style="color:var(--magenta);">WARN:</span> 2,481 msgs out today</div>
-        <div><span style="color:var(--magenta);">WARN:</span> retention_policy = unknown</div>
+    <div class="panel accent-magenta" style="background:#03050c; display:flex; align-items:center; gap: 36px; padding: 34px 42px; margin-top: auto;">
+      <div class="mono neon-magenta" style="font-size: 84px; line-height:1;">!</div>
+      <div class="grow">
+        <div class="panel-label" style="color: var(--magenta); margin-bottom: 10px;">AUDIT.LOG</div>
+        <div class="mono" style="font-size: 28px; line-height: 1.6;">
+          <span style="color:var(--fg-muted);">[12:04]</span> <span style="color:#ff6b8b;">OUT</span> mensajes + archivos + contactos → vendor.ai
+        </div>
+        <div class="mono" style="font-size: 24px; color: var(--fg-dim); margin-top: 10px;">
+          retention_policy = <span class="neon-magenta">unknown</span> · data_location = <span class="neon-magenta">unknown</span>
+        </div>
+      </div>
+      <div class="mono" style="font-size: 28px; color: var(--accent); text-align:right; letter-spacing:0.08em;">
+        TÚ YA<br>NO MANDAS
       </div>
     </div>
   </div>
